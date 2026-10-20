@@ -176,10 +176,13 @@ const collage=x=>{const a=COLL[x.id]();return a.length?`<div class="coll">${a.ma
 const $=s=>document.querySelector(s),app=$('#app'),pv=$('#pv');
 const ERR="this.replaceWith(Object.assign(document.createElement('div'),{className:'ph',textContent:this.alt}))";
 const im=(src,l)=>src?`<img src="${src}" alt="${l||''}" loading="lazy" onerror="${ERR}">`:`<div class="ph">${l||'IMAGE'}</div>`;
-const go=h=>{location.hash=h};
+const go=h=>{if(location.hash.slice(1)!==h)location.hash=h};
 const S=id=>SECTIONS.find(s=>s.id===id);
-function lb(src,l){$('#lbin').innerHTML=src?`<img src="${src}" alt="${l||''}" onerror="${ERR}">`:`<div class="ph">${l||'IMAGE'}</div>`;$('#lb').classList.add('on');document.body.style.overflow='hidden'}
-function closeLb(){$('#lb').classList.remove('on');document.body.style.overflow=''}
+let lbOn=false;
+function lb(src,l){$('#lbin').innerHTML=src?`<img src="${src}" alt="${l||''}" onerror="${ERR}">`:`<div class="ph">${l||'IMAGE'}</div>`;$('#lb').classList.add('on');document.body.style.overflow='hidden';if(!lbOn){lbOn=true;try{history.pushState({lb:1},'')}catch(e){}}}
+function hideLb(){$('#lb').classList.remove('on');document.body.style.overflow='';lbOn=false}
+function closeLb(){if(lbOn&&history.state&&history.state.lb)history.back();else hideLb()}
+window.addEventListener('popstate',()=>{if(lbOn)hideLb()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLb()});
 window.OPEN=(a,i,j)=>{const o=a==='d'?DATA.detail[i].items[j]:DATA.bannerDetail[i];lb(o.detail,o.label+' — 상세')};
 window.OPENS=(s,l)=>lb(s,l);
@@ -303,10 +306,12 @@ function initStage(){
     if(e.key==='Escape')setOv(false)
   });
 }
-window.setTab=i=>{tab=i;render()};
+window.setTab=i=>go('detail/'+i);
 $('#dock').innerHTML=`<button data-k="" onclick="go('')">INDEX</button>`+SECTIONS.map(s=>`<button data-k="${s.id}" onclick="go('${s.id}')" title="${s.label}">${s.n}</button>`).join('');
 function render(){
-  const h=location.hash.slice(1),k=V[h]?h:'home';
+  const [h,sub]=location.hash.slice(1).split('/'),k=V[h]?h:'home';
+  if(k==='detail')tab=Math.max(0,Math.min(CATS.length-1,+sub||0));
+  if(k!=='home')window.__idx=SECTIONS.findIndex(x=>x.id===k);
   app.style.animation='none';app.offsetHeight;app.style.animation='';
   app.innerHTML=V[k]();PV('',0);
   document.querySelectorAll('.dock button').forEach(b=>b.classList.toggle('on',b.dataset.k===(k==='home'?'':k)));
@@ -319,7 +324,7 @@ function render(){
     sw.addEventListener('click',()=>{const i=Math.round(sw.scrollLeft/sw.clientWidth);sw.scrollTo({left:(i?0:1)*sw.clientWidth,behavior:'smooth'})})
   });
 }
-window.addEventListener('hashchange',()=>{tab=0;render()});
+window.addEventListener('hashchange',render);
 render();
 </script>
 </body>
