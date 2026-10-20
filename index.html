@@ -106,6 +106,10 @@ body.home{overflow:hidden;background:var(--stage)}
 .dots{position:absolute;left:0;right:0;bottom:10px;display:flex;justify-content:center;gap:5px;pointer-events:none;z-index:2}
 .dots i{width:4px;height:4px;border-radius:50%;background:var(--fg);opacity:.25;transition:opacity .2s}
 .dots i.on{opacity:.9}
+.coll{position:absolute;inset:0;display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:2px}
+.it .card .coll img,.it .card .coll .ph{position:static;width:100%;height:100%;min-width:0;min-height:0}
+@media(max-width:700px){.coll>*:nth-child(3){display:none}}
+.nat{align-items:start}.nat .card{height:auto}.nat .card img{height:auto;object-fit:contain}.nat .ph{min-height:240px}
 /* dock */
 .dock{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 18px);transform:translateX(-50%);z-index:10;display:flex;gap:2px;padding:5px;border-radius:99px;background:var(--glass);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 0 0 1px var(--line),0 8px 24px rgba(0,0,0,.08)}
 .dock button{min-width:34px;height:30px;padding:0 10px;border-radius:99px;color:var(--mute);text-align:center;transition:background .2s,color .2s}
@@ -144,37 +148,44 @@ const PROFILE={
 };
 const CATS=['남성 캐쥬얼','여성 캐쥬얼','여성 가방','스노우','워크웨어','스포츠'];
 const mk=(n,f)=>Array.from({length:n},(_,i)=>f(i));
+const n2=n=>String(n).padStart(2,'0'),I=p=>'images/'+p;
+const KEYS=['men','women','bag','snow','work','sports'];
+const L=(dir,files,label)=>files.map((f,i)=>({src:I(dir+'/'+f),label:label+' '+n2(i+1)}));
+const BD=[{"t": "01_thumb.gif", "d": "01_detail.jpg"}, {"t": "02_thumb.jpg", "d": "02_detail.jpg"}, {"t": "03_thumb.jpg", "d": "03_detail.jpg"}, {"t": "04_thumb.gif", "d": "04_detail.jpg"}, {"t": "05_thumb.gif", "d": "05_detail.jpg"}, {"t": "06_thumb.webp", "d": "06_detail.jpg"}, {"t": "07_thumb.jpg", "d": "07_detail.jpg"}, {"t": "08_thumb.jpg", "d": "08_detail.jpg"}, {"t": "09_thumb.jpg", "d": "09_detail.jpg"}];
 const DATA={
-  detail:CATS.map(c=>({name:c,items:mk(2,i=>({thumb:'',detail:'',label:c+' '+(i+1)}))})),
-  retouch:mk(4,i=>({before:'',after:'',label:'Retouch '+(i+1)})),
-  bannerDetail:mk(3,i=>({src:'',detail:'',label:'배너(상세) '+(i+1)})),
-  bannerPlain:mk(6,i=>({src:'',label:'배너 '+(i+1)})),
-  insta:mk(6,g=>mk(2,i=>({src:'',label:'IG '+(g*2+i+1)}))),
-  pop:mk(6,g=>mk(2,i=>({src:'',label:'POP '+(g*2+i+1)}))),
-  ai:mk(6,g=>mk(2,i=>({src:'',label:'AI '+(g*2+i+1)})))
+  detail:CATS.map((c,ci)=>({name:c,items:mk(2,i=>({thumb:I(`detail/thumb/${KEYS[ci]}-${i+1}.jpg`),detail:I(`detail/detail/${KEYS[ci]}-${i+1}.jpg`),label:c+' '+(i+1)}))})),
+  retouch:mk(4,i=>({before:I(`detail/before/${i+1}.jpg`),after:I(`detail/after/${i+1}.jpg`),label:'Retouch '+(i+1)})),
+  bannerDetail:BD.map((b,i)=>({src:I('banner/detail/'+b.t),detail:I('banner/detail/'+b.d),label:'Banner '+n2(i+1)})),
+  bannerPlain:L('banner',["01.jpg", "02.jpg", "03.gif", "04.jpg", "05.jpg", "06.jpg", "07.jpg", "08.webp", "09.jpg", "11.jpg", "12.jpg", "13.jpg", "14.jpg", "15.jpg"],'Banner'),
+  bannerSeries:L('banner/series',["01.jpg", "02.jpg", "03.jpg"],'Series'),
+  insta:L('instagram',["01.jpg", "02.jpg", "03.jpg", "04.jpg", "05.jpg", "06.jpg", "07.jpg", "08.jpg", "09.jpg", "10.jpg", "11.jpg", "12.jpg", "13.jpg", "14.jpg", "15.gif", "16.jpg", "17.jpg"],'IG'),
+  pop:L('pop',["01.jpg", "02.jpg"],'POP'),
+  ai:L('ai',["01.jpg", "02.jpg", "03.jpg", "04.jpg", "05.jpg", "06.jpg", "07.jpg", "08.jpg", "09.jpg", "10.jpg", "11.jpg", "12.jpg", "13.jpg", "14.jpg", "15.jpg", "16.jpg", "17.jpg"],'AI')
 };
 const SECTIONS=[
   {id:'detail',n:'01',label:'썸네일 + 상세',c:'12'},
-  {id:'banner',n:'02',label:'모바일 배너',c:'09'},
-  {id:'insta',n:'03',label:'Instagram',c:'12'},
-  {id:'pop',n:'04',label:'POP',c:'12'},
-  {id:'ai',n:'05',label:'AI Image',c:'12'},
+  {id:'banner',n:'02',label:'모바일 배너',c:'26'},
+  {id:'insta',n:'03',label:'Instagram',c:'17'},
+  {id:'pop',n:'04',label:'POP',c:'02'},
+  {id:'ai',n:'05',label:'AI Image',c:'17'},
   {id:'resume',n:'06',label:'이력서',c:'—'}
 ];
-const FIRST={detail:()=>DATA.detail[0].items[0].thumb,banner:()=>DATA.bannerDetail[0].src,insta:()=>DATA.insta[0][0].src,pop:()=>DATA.pop[0][0].src,ai:()=>DATA.ai[0][0].src,resume:()=>''};
+const COLL={detail:()=>[DATA.detail[0].items[0].thumb,DATA.detail[0].items[1].thumb,DATA.detail[1].items[0].thumb],banner:()=>DATA.bannerDetail.slice(0,3).map(o=>o.src),insta:()=>DATA.insta.slice(0,3).map(o=>o.src),pop:()=>DATA.pop.slice(0,3).map(o=>o.src),ai:()=>DATA.ai.slice(0,3).map(o=>o.src),resume:()=>[]};
+const collage=x=>{const a=COLL[x.id]();return a.length?`<div class="coll">${a.map(u=>im(u,x.label)).join('')}</div>`:im('',x.label)};
 /* ===== 렌더링 ===== */
 const $=s=>document.querySelector(s),app=$('#app'),pv=$('#pv');
-const im=(src,l)=>src?`<img src="${src}" alt="${l||''}" loading="lazy">`:`<div class="ph">${l||'IMAGE'}</div>`;
+const ERR="this.replaceWith(Object.assign(document.createElement('div'),{className:'ph',textContent:this.alt}))";
+const im=(src,l)=>src?`<img src="${src}" alt="${l||''}" loading="lazy" onerror="${ERR}">`:`<div class="ph">${l||'IMAGE'}</div>`;
 const go=h=>{location.hash=h};
 const S=id=>SECTIONS.find(s=>s.id===id);
-function lb(src,l){$('#lbin').innerHTML=src?`<img src="${src}" alt="">`:`<div class="ph">${l||'IMAGE'}</div>`;$('#lb').classList.add('on');document.body.style.overflow='hidden'}
+function lb(src,l){$('#lbin').innerHTML=src?`<img src="${src}" alt="${l||''}" onerror="${ERR}">`:`<div class="ph">${l||'IMAGE'}</div>`;$('#lb').classList.add('on');document.body.style.overflow='hidden'}
 function closeLb(){$('#lb').classList.remove('on');document.body.style.overflow=''}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLb()});
 window.OPEN=(a,i,j)=>{const o=a==='d'?DATA.detail[i].items[j]:DATA.bannerDetail[i];lb(o.detail,o.label+' — 상세')};
 window.OPENS=(s,l)=>lb(s,l);
 window.COPY=async(t,el)=>{const o=el.textContent;try{await navigator.clipboard.writeText(t);el.textContent='Copied'}catch(e){el.textContent=t}setTimeout(()=>el.textContent=o,1600)};
 const hover=matchMedia('(hover:hover)').matches;
-window.PV=(id,on)=>{if(!hover)return;if(on&&id!=='resume'){pv.innerHTML=im(FIRST[id](),S(id).label);pv.classList.add('on')}else pv.classList.remove('on')};
+window.PV=(id,on)=>{if(!hover)return;if(on&&id!=='resume'){pv.innerHTML=im(COLL[id]()[0],S(id).label);pv.classList.add('on')}else pv.classList.remove('on')};
 document.addEventListener('mousemove',e=>{pv.style.transform=`translate(${e.clientX+26}px,${e.clientY-100}px)`});
 const head=id=>{const s=S(id);return `<div class="rbar"><button class="mono" onclick="go('')" style="justify-self:start">무제</button>${rulerHTML()}<span></span></div><div class="ttl"><span class="no">${s.n}</span><h1>${s.label}</h1><span class="ct">${s.c}</span></div>`};
 const flat=(arr,ar)=>`<div class="grid g4">${arr.flat().map(o=>`<button class="card ${ar}" onclick="OPENS('${o.src}','${o.label}')">${im(o.src,o.label)}</button>`).join('')}</div>`;
@@ -185,21 +196,24 @@ const V={
   <div class="tr links mono" onpointerdown="event.stopPropagation()">${PROFILE.links.map(l=>l.copy?`<button onclick="COPY('${l.copy}',this)">${l.label}</button>`:`<a href="${l.href}" target="_blank" rel="noopener">${l.label}</a>`).join('')}</div>
   ${rulerHTML()}
   <div class="plus"></div>
-  ${SECTIONS.map((x,i)=>`<div class="it" data-i="${i}"><div class="sl">${x.n} ${x.label}</div><div class="card">${im(FIRST[x.id](),x.label)}</div></div>`).join('')}
+  ${SECTIONS.map((x,i)=>`<div class="it" data-i="${i}"><div class="sl">${x.n} ${x.label}</div><div class="card">${collage(x)}</div></div>`).join('')}
   <div class="cur mono" id="cur"></div><div class="hint mono">scroll · drag · Z</div></div>`},
   detail(){const cat=DATA.detail[tab];return `${head('detail')}
   <div class="tabs">${DATA.detail.map((c,i)=>`<button class="tab ${i===tab?'on':''}" onclick="setTab(${i})">${c.name}</button>`).join('')}</div>
   <div class="grid narrow">${cat.items.map((o,j)=>`<div><button class="card ar-th" onclick="OPEN('d',${tab},${j})">${im(o.thumb,o.label)}</button><p class="cap">${o.label}</p></div>`).join('')}</div>
   <h2>원본 + 보정본</h2><p class="note">swipe →</p>
   <div class="grid narrow">${DATA.retouch.map(r=>`<div class="card ar-th"><div class="sw"><div>${im(r.after,r.label+' 보정본')}</div><div>${im(r.before,r.label+' 원본')}</div></div><span class="dots"><i class="on"></i><i></i></span></div>`).join('')}</div>`},
-  banner(){return `${head('banner')}
-  <h2 style="margin-top:0">상세 있음</h2><p class="note">03</p>
-  <div class="grid one">${DATA.bannerDetail.map((b,i)=>`<button class="card ar-bn" onclick="OPEN('b',${i})"><span class="badge">DETAIL</span>${im(b.src,b.label)}</button>`).join('')}</div>
-  <h2>상세 없음</h2><p class="note">06</p>
-  <div class="grid one">${DATA.bannerPlain.map(b=>`<button class="card ar-bn" onclick="OPENS('${b.src}','${b.label}')">${im(b.src,b.label)}</button>`).join('')}</div>`},
+  banner(){const g=(arr,fn)=>`<div class="grid g4 nat">${arr.map(fn).join('')}</div>`,pl=b=>`<button class="card" onclick="OPENS('${b.src}','${b.label}')">${im(b.src,b.label)}</button>`;
+  return `${head('banner')}
+  <h2 style="margin-top:0">상세 있음</h2><p class="note">${n2(DATA.bannerDetail.length)}</p>
+  ${g(DATA.bannerDetail,(b,i)=>`<button class="card" onclick="OPEN('b',${i})"><span class="badge">DETAIL</span>${im(b.src,b.label)}</button>`)}
+  <h2>상세 없음</h2><p class="note">${n2(DATA.bannerPlain.length)}</p>
+  ${g(DATA.bannerPlain,pl)}
+  <h2>시리즈</h2><p class="note">${n2(DATA.bannerSeries.length)}</p>
+  ${g(DATA.bannerSeries,pl)}`},
   insta(){return head('insta')+flat(DATA.insta,'ar-ig')},
-  pop(){return head('pop')+flat(DATA.pop,'ar-ig')},
-  ai(){return head('ai')+flat(DATA.ai,'ar-ig')},
+  pop(){return head('pop')+`<div class="grid narrow nat">${DATA.pop.map(o=>`<button class="card" onclick="OPENS('${o.src}','${o.label}')">${im(o.src,o.label)}</button>`).join('')}</div>`},
+  ai(){return head('ai')+flat(DATA.ai,'ar-th')},
   resume(){return `${head('resume')}<div class="resume">${PROFILE.resume.map(s=>`<section><h3>${s.title}</h3><ul>${s.rows.map(r=>`<li><span>${r[0]}</span><span>${r[1]}</span></li>`).join('')}</ul></section>`).join('')}</div>`}
 };
 const NAMES=SECTIONS.map(x=>x.label),NS=NAMES.length,T=(NS-1)*2+1,RW=30;
