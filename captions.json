@@ -1,0 +1,294 @@
+{
+ "_도움말": {
+  "title": "큰 이미지 아래에 보일 제목",
+  "desc": "설명을 여기에 적어요. 제목과 설명이 모두 비어 있으면 아무것도 안 보여요. 이 _도움말 부분은 지워도 돼요."
+ },
+ "images/detail/detail/men-1.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/detail/detail/men-2.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/detail/detail/women-1.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/detail/detail/women-2.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/detail/detail/bag-1.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/detail/detail/bag-2.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/detail/detail/snow-1.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/detail/detail/snow-2.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/detail/detail/work-1.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/detail/detail/work-2.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/detail/detail/sports-1.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/detail/detail/sports-2.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/ai/01.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/ai/02.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/ai/03.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/ai/04.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/ai/05.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/ai/06.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/ai/07.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/ai/08.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/ai/09.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/ai/10.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/ai/11.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/ai/12.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/ai/13.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/ai/14.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/ai/15.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/ai/16.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/ai/17.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/instagram/01.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/instagram/02.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/instagram/03.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/instagram/04.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/instagram/05.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/instagram/06.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/instagram/07.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/instagram/08.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/instagram/09.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/instagram/10.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/instagram/11.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/instagram/12.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/instagram/13.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/instagram/14.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/instagram/15.gif": {
+  "title": "",
+  "desc": ""
+ },
+ "images/instagram/16.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/instagram/17.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/banner/detail/01_detail.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/banner/detail/02_detail.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/banner/detail/03_detail.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/banner/detail/04_detail.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/banner/detail/05_detail.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/banner/detail/06_detail.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/banner/detail/07_detail.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/banner/detail/08_detail.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/banner/detail/09_detail.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/banner/01.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/banner/02.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/banner/03.gif": {
+  "title": "",
+  "desc": ""
+ },
+ "images/banner/04.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/banner/05.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/banner/06.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/banner/07.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/banner/08.webp": {
+  "title": "",
+  "desc": ""
+ },
+ "images/banner/09.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/banner/11.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/banner/12.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/banner/13.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/banner/14.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/banner/15.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/banner/series/01.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/banner/series/02.jpg": {
+  "title": "",
+  "desc": ""
+ },
+ "images/banner/series/03.jpg": {
+  "title": "",
+  "desc": ""
+ }
+}
