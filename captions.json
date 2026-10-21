@@ -3,51 +3,51 @@
   "title": "큰 이미지 아래에 보일 제목",
   "desc": "설명을 여기에 적어요. 제목과 설명이 모두 비어 있으면 아무것도 안 보여요. 이 _도움말 부분은 지워도 돼요."
  },
- "images/detail/detail/men-1.jpg": {
+ "images/detail/men/detail/01/index.html": {
   "title": "",
   "desc": ""
  },
- "images/detail/detail/men-2.jpg": {
+ "images/detail/men/detail/02/index.html": {
   "title": "",
   "desc": ""
  },
- "images/detail/detail/women-1.jpg": {
+ "images/detail/women/detail/01/index.html": {
   "title": "",
   "desc": ""
  },
- "images/detail/detail/women-2.jpg": {
+ "images/detail/women/detail/02/index.html": {
   "title": "",
   "desc": ""
  },
- "images/detail/detail/bag-1.jpg": {
+ "images/detail/bag/detail/01/index.html": {
   "title": "",
   "desc": ""
  },
- "images/detail/detail/bag-2.jpg": {
+ "images/detail/bag/detail/02/index.html": {
   "title": "",
   "desc": ""
  },
- "images/detail/detail/snow-1.jpg": {
+ "images/detail/snow/detail/01/index.html": {
   "title": "",
   "desc": ""
  },
- "images/detail/detail/snow-2.jpg": {
+ "images/detail/snow/detail/02/index.html": {
   "title": "",
   "desc": ""
  },
- "images/detail/detail/work-1.jpg": {
+ "images/detail/workwear/detail/01/index.html": {
   "title": "",
   "desc": ""
  },
- "images/detail/detail/work-2.jpg": {
+ "images/detail/workwear/detail/02/index.html": {
   "title": "",
   "desc": ""
  },
- "images/detail/detail/sports-1.jpg": {
+ "images/detail/sports/detail/01/index.html": {
   "title": "",
   "desc": ""
  },
- "images/detail/detail/sports-2.jpg": {
+ "images/detail/sports/detail/02/index.html": {
   "title": "",
   "desc": ""
  },

@@ -152,6 +152,8 @@ body.home{overflow:hidden;background:var(--stage)}
 .ctr h2,.ctr .note{text-align:center}
 .sl{left:50%;top:calc(50% + 26px);bottom:auto;transform:translateX(-50%);z-index:2;color:#fff;font-size:11px;font-weight:400;text-shadow:0 1px 10px rgba(0,0,0,.4);pointer-events:none}
 @media(min-width:900px){.bn3{grid-template-columns:repeat(3,1fr)}}
+.pg{display:block;width:100%;min-height:60vh;border:0;background:#fff}
+.lb .in:has(.pg){max-width:860px}
 </style>
 </head>
 <body>
@@ -180,11 +182,13 @@ const PROFILE={
 const CATS=['남성 캐쥬얼','여성 캐쥬얼','여성 가방','스노우','워크웨어','스포츠'];
 const mk=(n,f)=>Array.from({length:n},(_,i)=>f(i));
 const n2=n=>String(n).padStart(2,'0'),I=p=>'images/'+p;
-const KEYS=['men','women','bag','snow','work','sports'];
+const KEYS=['men','women','bag','snow','workwear','sports'];
+const TH={'men-1':'S_BA264TR002_ID_01.jpg','men-2':'S_VA264TL001_IG_01.jpg','women-1':'S_BA264TR501_BK_01.jpg','women-2':'S_BA264TL502_WH_01.jpg'};
+const NM={'men-1':'코듀로이 플리스 후드 집업','men-2':'웨이브 롱슬리브','women-1':'우먼스 셔닐 후드 집업','women-2':'우먼스 크라운 후드 롱슬리브'};
 const L=(dir,files,label)=>files.map((f,i)=>({src:I(dir+'/'+f),label:label+' '+n2(i+1)}));
 const BD=[{"t": "01.gif", "d": "01_detail.jpg"}, {"t": "02.gif", "d": "02_detail.jpg"}, {"t": "03.jpg", "d": "03_detail.jpg"}, {"t": "04.gif", "d": "04_detail.jpg"}, {"t": "05.jpg", "d": "05_detail.jpg"}, {"t": "06.jpg", "d": "06_detail.jpg"}, {"t": "07.jpg", "d": "07_detail.jpg"}, {"t": "08.jpg", "d": "08_detail.jpg"}, {"t": "09.jpg", "d": "09_detail.jpg"}];
 const DATA={
-  detail:CATS.map((c,ci)=>({name:c,items:mk(2,i=>({thumb:I(`detail/thumb/${KEYS[ci]}-${i+1}.jpg`),detail:I(`detail/detail/${KEYS[ci]}-${i+1}.jpg`),label:c+' '+(i+1)}))})),
+  detail:CATS.map((c,ci)=>({name:c,items:mk(2,i=>{const k=KEYS[ci]+'-'+(i+1),b=`detail/${KEYS[ci]}/detail/0${i+1}/`;return {thumb:I(b+(TH[k]||'thumb.jpg')),detail:I(b+'index.html'),label:NM[k]||(c+' '+(i+1))}})})),
   retouch:mk(4,i=>({before:I(`detail/before/${i+1}.jpg`),after:I(`detail/after/${i+1}.jpg`),label:'Retouch '+(i+1)})),
   bannerDetail:BD.map((b,i)=>({src:I('banner/detail/'+b.t),detail:I('banner/detail/'+b.d),label:'Banner '+n2(i+1)})),
   bannerPlain:L('banner/none',["01.jpg", "02.jpg", "03.jpg", "04.jpg", "05.jpg", "06.jpg", "07.jpg", "08.jpg", "09.jpg", "10.gif", "11.jpg", "12.jpg"],'Banner'),
@@ -209,10 +213,11 @@ const im=(src,l)=>src?`<img src="${src}" alt="${l||''}" loading="lazy" onerror="
 const go=h=>{if(location.hash.slice(1)!==h)location.hash=h};
 const S=id=>SECTIONS.find(s=>s.id===id);
 let lbOn=false,CAP={};
+function fitFrame(f){try{const d=f.contentDocument,h=()=>{f.style.height=d.documentElement.scrollHeight+'px'};h();d.querySelectorAll('img').forEach(i=>i.addEventListener('load',h));if(f.contentWindow.ResizeObserver)new f.contentWindow.ResizeObserver(h).observe(d.body)}catch(e){f.style.height='90vh'}}
 fetch('captions.json').then(r=>r.ok?r.json():{}).then(j=>{CAP=j||{}}).catch(()=>{});
 const esc=t=>String(t).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])).replace(/\n/g,'<br>');
 function showCap(k){const c=CAP[k],el=$('#lbcap');if(c&&(c.title||c.desc)){el.innerHTML=(c.title?`<b>${esc(c.title)}</b>`:'')+(c.desc?`<p>${esc(c.desc)}</p>`:'');el.style.display='block'}else el.style.display='none'}
-function lb(src,l){$('#lbin').innerHTML=src?`<img src="${src}" alt="${l||''}" onerror="${ERR}">`:`<div class="ph">${l||'IMAGE'}</div>`;showCap(src);$('#lb').classList.add('on');document.body.style.overflow='hidden';if(!lbOn){lbOn=true;try{history.pushState({lb:1},'')}catch(e){}}}
+function lb(src,l){$('#lbin').innerHTML=/\.html$/.test(src||'')?`<iframe class="pg" src="${src}" title="${l||''}" onload="fitFrame(this)"></iframe>`:src?`<img src="${src}" alt="${l||''}" onerror="${ERR}">`:`<div class="ph">${l||'IMAGE'}</div>`;showCap(src);$('#lb').classList.add('on');document.body.style.overflow='hidden';if(!lbOn){lbOn=true;try{history.pushState({lb:1},'')}catch(e){}}}
 function hideLb(){$('#lb').classList.remove('on');document.body.style.overflow='';lbOn=false}
 function closeLb(){if(lbOn&&history.state&&history.state.lb)history.back();else hideLb()}
 window.addEventListener('popstate',()=>{if(lbOn)hideLb()});
