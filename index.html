@@ -270,6 +270,10 @@ body,body.home,.lb{background-image:url("data:image/svg+xml;utf8,<svg xmlns='htt
 .rs-end .rs-p{max-width:860px;margin-left:auto;margin-right:auto;color:var(--mute)}
 @media(max-width:800px){.rs-sec{grid-template-columns:1fr;gap:22px;padding:48px 0}.rs-sec .pk{font-size:clamp(52px,17vw,100px)}
  .rs-p{font-size:18px}.rs-it{grid-template-columns:34px 1fr}.rs-it h4{font-size:20px}.rs-it p{font-size:16px}.rs-end{padding:64px 0 20px}.rs-end .pk{font-size:clamp(46px,15vw,100px)}}
+
+.rs-it:last-child{border-bottom:0}
+.rs-sec:first-child{border-top:0;padding-top:24px}
+@media(max-width:700px){.rt1{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -315,7 +319,7 @@ const SECTIONS=[
   {id:'ai',t:'AI IMAGE',t2:['AI','IMAGE'],n:'02',label:'AI Image',c:''},
   {id:'insta',t:'INSTAGRAM',t2:['INSTA','GRAM'],n:'03',label:'Instagram',c:''},
   {id:'banner',t:'BANNER',n:'04',label:'모바일 배너',c:'24'},
-  {id:'resume',t:'RESUME',n:'05',label:'이력서',c:'—'}
+  {id:'resume',t:'RESUME',n:'05',label:'이력서',c:''}
 ];
 const COLL={detail:()=>[DATA.detail[0].items[0].thumb,DATA.detail[0].items[1].thumb,DATA.detail[1].items[0].thumb],banner:()=>DATA.bannerSeries.slice(0,1).map(o=>o.src),insta:()=>[I('instagram/01.jpg')],pop:()=>DATA.pop.slice(0,3).map(o=>o.src),ai:()=>[I('ai/26FW/01.jpg')],resume:()=>[I('resume/1.jpg')]};
 const collage=x=>{const a=COLL[x.id]();return im(a.length?a[0]:'',x.label)};
@@ -410,16 +414,16 @@ window.COPY=async(t,el)=>{const o=el.textContent;try{await navigator.clipboard.w
 const hover=matchMedia('(hover:hover)').matches;
 window.PV=(id,on)=>{if(!hover)return;if(on&&id!=='resume'){pv.innerHTML=im(COLL[id]()[0],S(id).label);pv.classList.add('on')}else pv.classList.remove('on')};
 document.addEventListener('mousemove',e=>{pv.style.transform=`translate(${e.clientX+26}px,${e.clientY-100}px)`});
-const head=id=>{const s=S(id);return `<div class="bar"><button class="mono" onclick="go('')">← 무제</button></div><div class="ttl"><h1>${s.label}</h1><span class="ct">${s.c}</span></div>`};
+const head=id=>{const s=S(id);return `<div class="bar"><button class="mono" onclick="go('')">← Main</button></div><div class="ttl"><h1>${s.label}</h1><span class="ct">${s.c}</span></div>`};
 const flat=(arr,ar)=>`<div class="grid g4">${arr.flat().map(o=>`<button class="card ${ar}" onclick="OPENS('${o.src}','${o.label}')">${im(o.src,o.label)}</button>`).join('')}</div>`;
 
 /* ===== 확장자 자동 탐색 · 동적 그리드 · 설명 ===== */
-const EXTS=['jpg','gif','png','webp','jpeg'];
+const EXTS=['jpg','gif','png','webp'];
 const cand=b=>b.split('|').flatMap(x=>EXTS.map(e=>I(x)+'.'+e));
 const nimg=(b,alt)=>{const c=cand(b);return `<img src="${c[0]}" data-c="${c.join(',')}" data-k="0" alt="${alt||''}" decoding="async" loading="lazy" onerror="nx(this)">`};
 function nx(img){const c=img.dataset.c.split(','),k=+img.dataset.k+1;if(k<c.length){img.dataset.k=k;img.src=c[k]}else{const r=img.closest('.dc');if(r){r.remove();syncWsw()}}}
 window.ZM=el=>{const i=el.querySelector('img');if(i)lb(i.getAttribute('src'),'')};
-const dynGrid=(dir,max,ar,skip=[])=>`<div class="grid bn3">${Array.from({length:max},(_,i)=>i+1).filter(n=>!skip.includes(n)).map(n=>`<button class="card dc ${ar}" onclick="ZM(this)">${nimg(dir+'/'+n2(n)+'|'+dir+'/'+n)}</button>`).join('')}</div>`;
+const dynGrid=(dir,max,ar,skip=[])=>`<div class="grid bn3">${Array.from({length:max},(_,i)=>i+1).filter(n=>!skip.includes(n)).map(n=>`<button class="card dc ${ar}" onclick="ZM(this)">${nimg(dir+'/'+n2(n))}</button>`).join('')}</div>`;
 const VIDEO_RATIO='212 / 140';
 const VEXT=['mp4','webm','mov'];
 const vcand=b=>b.split('|').flatMap(x=>VEXT.map(e=>I(x)+'.'+e));
@@ -442,7 +446,7 @@ const bannerBottom=()=>`<section class="blk"><div class="grid bn3 nat"><div clas
 let tab=0;
 const V={
   home(){return `<div class="stage" id="stage">
-  <div class="tl mono">무제</div>
+  <div class="tl mono">Main</div>
   <div class="tr links mono" onpointerdown="event.stopPropagation()">${PROFILE.links.map(l=>l.copy?`<button onclick="COPY('${l.copy}',this)">${l.label}</button>`:`<a href="${l.href}" target="_blank" rel="noopener">${l.label}</a>`).join('')}</div>
   ${SECTIONS.map((x,i)=>`<div class="it" data-i="${i}"><div class="sl">${x.label}</div><div class="card">${collage(x)}</div></div>`).join('')}
   <div class="ttls">${SECTIONS.map(x=>`<div class="tt"><span>${x.t}</span></div>`).join('')}</div><div class="grain"></div>
@@ -451,7 +455,7 @@ const V={
   <div class="tabs">${DATA.detail.map((c,i)=>`<button class="tab ${i===tab?'on':''}" onclick="setTab(${i})">${c.name}</button>`).join('')}</div>
   <div class="grid narrow">${cat.items.map((o,j)=>`<div><button class="card ar-th" onclick="OPEN('d',${tab},${j})">${im(o.thumb,o.label)}</button><p class="cap">${o.label}</p></div>`).join('')}</div>
   <h2>원본 + 보정본</h2><p class="note">swipe →</p>
-  <div class="grid narrow">${cat.retouch.map(r=>`<div class="card ar-th"><div class="sw"><div>${im(r.after,r.label+' 보정본')}</div><div>${im(r.before,r.label+' 원본')}</div></div><span class="dots"><i class="on"></i><i></i></span></div>`).join('')}</div></div>`},
+  <div class="grid narrow rt1">${cat.retouch.map(r=>`<div class="card ar-th"><div class="sw"><div>${im(r.after,r.label+' 보정본')}</div><div>${im(r.before,r.label+' 원본')}</div></div><span class="dots"><i class="on"></i><i></i></span></div>`).join('')}</div></div>`},
   banner(){const g=(arr,fn)=>`<div class="grid bn3 m3 nat">${arr.map(fn).join('')}</div>`,pl=b=>`<button class="card" onclick="OPENS('${b.src}','${b.label}')">${im(b.src,b.label)}</button>`;
   return `${head('banner')}
   <h2 style="margin-top:0">시리즈</h2><p class="note">${n2(DATA.bannerSeries.length)}</p>
@@ -474,10 +478,10 @@ const V={
 };
 const RES={
  about:{sub:'FASHION / E-COMMERCE DESIGNER',p:['브랜드의 무드와 방향성을 이해하고 시각적으로 풀어내는 디자이너입니다.','여성·남성 패션부터 잡화, 스포츠웨어, 워크웨어까지 다양한 카테고리의 브랜드를 경험하며 각 브랜드의 컨셉과 톤에 맞는 디자인을 작업해왔습니다.','이미지 선택부터 타이포그래피, 여백과 정렬 등 작은 디테일까지 고민하며 브랜드의 인상과 디자인의 완성도를 높이는 것을 중요하게 생각합니다.']},
- exp:[['E-COMMERCE DESIGN','상세페이지 · 프로모션/기획전 · 배너 · 상품 콘텐츠'],['BRAND / WEB DESIGN','브랜드 홈페이지 · PC/MO 콘텐츠 · UI 비주얼 개선 · 브랜드 비주얼'],['CONTENT DESIGN','SNS 콘텐츠 · 캠페인 비주얼 · 숏폼/모션 콘텐츠'],['AI VISUAL CONTENT','AI 이미지 생성 · 제품 착장 이미지 · 이미지 리터칭/합성 · AI 기반 비주얼 콘텐츠']],
+ exp:[['E-COMMERCE DESIGN','상세페이지 · 프로모션/기획전 · 배너 · 상품 콘텐츠'],['BRAND / WEB DESIGN','브랜드 홈페이지 · PC/MO 콘텐츠 · UI 비주얼 개선 · 브랜드 비주얼'],['CONTENT DESIGN','SNS 콘텐츠 · 캠페인 비주얼'],['AI VISUAL CONTENT','AI 이미지 생성 · 제품 착장 이미지 · 이미지 리터칭/합성 · AI 기반 비주얼 콘텐츠']],
  skills:[['BRAND INTERPRETATION','브랜드와 제품의 특성을 파악하고 각 컨셉에 맞는 비주얼과 톤앤매너를 전개합니다.'],['VISUAL DETAIL','이미지, 타이포그래피, 여백, 정렬과 정보의 시각적 순서까지 세밀하게 조율합니다.'],['MULTI-CATEGORY EXPERIENCE','Womenswear · Menswear · Accessories · Sportswear · Workwear 등 다양한 카테고리의 디자인 경험을 가지고 있습니다.'],['AI & NEW TOOLS','새로운 디자인 및 AI 툴을 적극적으로 탐색하고 실제 업무에 적용하여 비주얼 표현과 작업 방식을 확장합니다.']],
  tools:[['DESIGN','Photoshop · Illustrator · Figma'],['AI / VISUAL','AI Image Generation · AI Retouching'],['WEB','HTML · CSS']],
- end:{t:['DETAIL MAKES','THE DIFFERENCE.'],p:['작은 차이가 브랜드의 인상을 만든다고 생각합니다.','보기 좋은 디자인을 넘어 브랜드의 무드와 정보가 자연스럽게 연결되는 완성도 높은 디자인을 지향합니다.']}
+ end:{t:['DETAIL MAKES','THE DIFFERENCE.'],p:['작은 차이가 브랜드의 인상을 만든다고 생각합니다. 보기 좋은 디자인을 넘어 브랜드의 무드와 정보가 자연스럽게 연결되는 완성도 높은 디자인을 지향합니다.']}
 };
 const NAMES=SECTIONS.map(x=>x.label),NS=NAMES.length,T=(NS-1)*2+1,RW=30;
 const rulerHTML=()=>`<div class="ruler" id="ruler" aria-label="section nav">${Array.from({length:T},(_,k)=>`<i class="tk${k%2?'':' mj'}" style="left:calc(15px + (100% - 30px) * ${k/(T-1)})"></i>`).join('')}${NAMES.map((_,i)=>`<span class="rn" style="left:calc(15px + (100% - 30px) * ${i/(NS-1)})">${SECTIONS[i].n}</span>`).join('')}<em class="rt"></em><i class="rc"><svg viewBox="0 0 24 24"><path d="M8.5 3 3 6l2 4 2.5-1.2V20h9V8.8L19 10l2-4-5.5-3c-.6 1.6-2 2.5-3.5 2.5S9.1 4.6 8.5 3Z"/></svg></i></div>`;
