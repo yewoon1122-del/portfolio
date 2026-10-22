@@ -150,6 +150,7 @@ body.home{overflow:hidden;background:var(--stage)}
 .narrow{margin-left:auto;margin-right:auto}
 .ctr .tabs{justify-content:safe center}
 .ctr h2,.ctr .note{text-align:center}
+.ctr h2{font-size:20px;font-weight:500}.ctr .note{font-size:14px}
 .sl{left:50%;top:calc(50% + 26px);bottom:auto;transform:translateX(-50%);z-index:2;color:#fff;font-size:11px;font-weight:400;text-shadow:0 1px 10px rgba(0,0,0,.4);pointer-events:none}
 @media(min-width:900px){.bn3{grid-template-columns:repeat(3,1fr)}}
 /* product detail (built inside this site) */
@@ -211,8 +212,8 @@ body.home{overflow:hidden;background:var(--stage)}
 .wsw-in>div{flex:0 0 100%;scroll-snap-align:start}
 .wsw-in img{width:100%;height:auto;display:block;-webkit-user-drag:none;user-select:none}
 .desc{max-width:900px;margin:28px auto 0;text-align:center}
-.desc h3{font-size:32px;font-weight:700;letter-spacing:-.02em;line-height:1.25;margin-bottom:18px}
-.desc p{font-size:26px;line-height:1.65;color:var(--mute);margin-bottom:20px;word-break:keep-all}
+.desc h3{font-size:24px;font-weight:700;letter-spacing:-.02em;line-height:1.25;margin-bottom:18px}
+.desc p{font-size:19px;line-height:1.7;color:var(--mute);margin-bottom:20px;word-break:keep-all}
 @media(max-width:700px){.desc h3{font-size:23px;margin-bottom:14px}.desc p{font-size:18px;line-height:1.7;margin-bottom:16px}}
 .wsw{margin-left:auto;margin-right:auto}
 .lb video{background:#000}
@@ -315,7 +316,7 @@ const DATA={
   pop:L('pop',["01.jpg", "02.jpg"],'POP')
 };
 const SECTIONS=[
-  {id:'detail',t:'DETAIL',n:'01',label:'썸네일 + 상세',c:'12'},
+  {id:'detail',t:'DETAIL',n:'01',label:'썸네일 + 상세',c:''},
   {id:'ai',t:'AI IMAGE',t2:['AI','IMAGE'],n:'02',label:'AI Image',c:''},
   {id:'insta',t:'INSTAGRAM',t2:['INSTA','GRAM'],n:'03',label:'Instagram',c:''},
   {id:'banner',t:'BANNER',n:'04',label:'모바일 배너',c:'24'},
@@ -453,7 +454,7 @@ const V={
   <div class="cur mono" id="cur"></div><div class="hint mono">scroll · drag · Z</div></div>`},
   detail(){const cat=DATA.detail[tab];return `${head('detail')}<div class="ctr">
   <div class="tabs">${DATA.detail.map((c,i)=>`<button class="tab ${i===tab?'on':''}" onclick="setTab(${i})">${c.name}</button>`).join('')}</div>
-  <div class="grid narrow">${cat.items.map((o,j)=>`<div><button class="card ar-th" onclick="OPEN('d',${tab},${j})">${im(o.thumb,o.label)}</button><p class="cap">${o.label}</p></div>`).join('')}</div>
+  <div class="grid narrow">${cat.items.map((o,j)=>`<div><button class="card ar-th" onclick="OPEN('d',${tab},${j})">${im(o.thumb,o.label)}</button></div>`).join('')}</div>
   <h2>원본 + 보정본</h2><p class="note">swipe →</p>
   <div class="grid narrow rt1">${cat.retouch.map(r=>`<div class="card ar-th"><div class="sw"><div>${im(r.after,r.label+' 보정본')}</div><div>${im(r.before,r.label+' 원본')}</div></div><span class="dots"><i class="on"></i><i></i></span></div>`).join('')}</div></div>`},
   banner(){const g=(arr,fn)=>`<div class="grid bn3 m3 nat">${arr.map(fn).join('')}</div>`,pl=b=>`<button class="card" onclick="OPENS('${b.src}','${b.label}')">${im(b.src,b.label)}</button>`;
