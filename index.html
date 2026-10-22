@@ -202,6 +202,8 @@ body.home{overflow:hidden;background:var(--stage)}
 .vid .play svg{width:44px;height:44px;fill:#fff;padding:12px;background:rgba(0,0,0,.45);border-radius:50%;backdrop-filter:blur(6px)}
 .blk{margin-top:40px}
 .vb1{grid-column:1/-1;justify-self:center;width:100%}@media(min-width:900px){.vb1{grid-column:1/-1;width:calc((100% - 16px)/3)}}
+.m3{grid-template-columns:repeat(3,1fr);gap:4px}
+@media(min-width:900px){.m3{gap:8px}}
 .vb video{width:100%;height:auto;display:block}
 .wsw{position:relative;width:100%;background:var(--card);overflow:hidden}
 .wsw-in{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;cursor:pointer;align-items:flex-start}
@@ -394,7 +396,7 @@ const V={
   <div class="grid narrow">${cat.items.map((o,j)=>`<div><button class="card ar-th" onclick="OPEN('d',${tab},${j})">${im(o.thumb,o.label)}</button><p class="cap">${o.label}</p></div>`).join('')}</div>
   <h2>원본 + 보정본</h2><p class="note">swipe →</p>
   <div class="grid narrow">${cat.retouch.map(r=>`<div class="card ar-th"><div class="sw"><div>${im(r.after,r.label+' 보정본')}</div><div>${im(r.before,r.label+' 원본')}</div></div><span class="dots"><i class="on"></i><i></i></span></div>`).join('')}</div></div>`},
-  banner(){const g=(arr,fn)=>`<div class="grid bn3 nat">${arr.map(fn).join('')}</div>`,pl=b=>`<button class="card" onclick="OPENS('${b.src}','${b.label}')">${im(b.src,b.label)}</button>`;
+  banner(){const g=(arr,fn)=>`<div class="grid bn3 m3 nat">${arr.map(fn).join('')}</div>`,pl=b=>`<button class="card" onclick="OPENS('${b.src}','${b.label}')">${im(b.src,b.label)}</button>`;
   return `${head('banner')}
   <h2 style="margin-top:0">시리즈</h2><p class="note">${n2(DATA.bannerSeries.length)}</p>
   ${g(DATA.bannerSeries,pl)}
