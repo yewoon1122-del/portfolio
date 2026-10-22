@@ -290,6 +290,14 @@ footer.cr{margin-top:90px;padding:28px 0 0;border-top:1px solid var(--line)}
 .it .card .bwl{opacity:0;filter:grayscale(1) sepia(.12) contrast(1.55) brightness(.62);pointer-events:none;will-change:opacity}
 .tt span{will-change:transform}
 body.home .dock{backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);background:var(--glass)}
+
+.cr.home{left:auto;right:20px;transform:none;text-align:right;bottom:calc(env(safe-area-inset-bottom,0px) + 30px);line-height:1.5}
+@media(max-width:700px){.cr.home{right:20px;width:auto;max-width:64vw;font-size:7.5px;line-height:1.5;bottom:calc(env(safe-area-inset-bottom,0px) + 28px)}.cr.home .en{display:inline}.cur{bottom:calc(env(safe-area-inset-bottom,0px) + 28px)}}
+.blk+.blk{margin-top:82px}
+@media(max-width:700px){.blk+.blk{margin-top:76px}}
+.rs-sec{padding:44px 0}.rs-sec:first-child{padding-top:24px}.rs-sub{margin-bottom:16px}.rs-p{margin-bottom:12px}.rs-it{padding:15px 0}.rs-it:first-child{padding-top:4px}
+@media(max-width:800px){.rs-sec{padding:30px 0}.rs-sec:first-child{padding-top:20px}.rs-it{padding:12px 0}}
+.lbn{margin-top:60px;padding-bottom:30px}
 </style>
 </head>
 <body>
@@ -334,7 +342,7 @@ const SECTIONS=[
   {id:'detail',t:'DETAIL',n:'01',label:'썸네일 + 상세',c:''},
   {id:'ai',t:'AI IMAGE',t2:['AI','IMAGE'],n:'02',label:'AI Image',c:''},
   {id:'insta',t:'INSTAGRAM',t2:['INSTA','GRAM'],n:'03',label:'Instagram',c:''},
-  {id:'banner',t:'BANNER',n:'04',label:'모바일 배너',c:'24'},
+  {id:'banner',t:'BANNER',n:'04',label:'모바일 배너',c:''},
   {id:'resume',t:'RESUME',n:'05',label:'이력서',c:''}
 ];
 const COLL={detail:()=>[DATA.detail[0].items[0].thumb,DATA.detail[0].items[1].thumb,DATA.detail[1].items[0].thumb],banner:()=>DATA.bannerSeries.slice(0,1).map(o=>o.src),insta:()=>[I('instagram/01.jpg')],pop:()=>DATA.pop.slice(0,3).map(o=>o.src),ai:()=>[I('ai/26FW/01.jpg')],resume:()=>[I('resume/1.jpg')]};
@@ -349,7 +357,7 @@ let lbOn=false,CAP={};
 fetch('captions.json').then(r=>r.ok?r.json():{}).then(j=>{CAP=j||{}}).catch(()=>{});
 const esc=t=>String(t).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])).replace(/\n/g,'<br>');
 function showCap(k){const c=CAP[k],el=$('#lbcap');if(c&&(c.title||c.desc)){el.innerHTML=(c.title?`<b>${esc(c.title)}</b>`:'')+(c.desc?`<p>${esc(c.desc)}</p>`:'');el.style.display='block'}else el.style.display='none'}
-function lb(src,l,html){$('#lbin').innerHTML=html||(src?`<img src="${src}" alt="${l||''}" onerror="${ERR}">`:`<div class="ph">${l||'IMAGE'}</div>`);showCap(src);$('#lb').classList.add('on');document.body.style.overflow='hidden';if(!lbOn){lbOn=true;try{history.pushState({lb:1},'')}catch(e){}}}
+function lb(src,l,html){$('#lbin').innerHTML=(html||(src?`<img src="${src}" alt="${l||''}" onerror="${ERR}">`:`<div class="ph">${l||'IMAGE'}</div>`))+`<p class="cr mono lbn">${NOTICE}</p>`;showCap(src);$('#lb').classList.add('on');document.body.style.overflow='hidden';if(!lbOn){lbOn=true;try{history.pushState({lb:1},'')}catch(e){}}}
 function hideLb(){$('#lb').classList.remove('on');document.body.style.overflow='';lbOn=false}
 function closeLb(){if(lbOn&&history.state&&history.state.lb)history.back();else hideLb()}
 window.addEventListener('popstate',()=>{if(lbOn)hideLb()});
@@ -457,7 +465,7 @@ const descHTML=k=>`<div class="desc"><h3>${DESC[k][0]}</h3>${DESC[k][1].map(t=>`
 const wsw=bs=>`<div class="wsw"><div class="wsw-in">${bs.map(b=>`<div class="dc">${nimg(b)}</div>`).join('')}</div><span class="dots">${bs.map((_,i)=>`<i${i?'':' class="on"'}></i>`).join('')}</span></div>`;
 function syncWsw(){document.querySelectorAll('.wsw').forEach(w=>{const n=w.querySelector('.wsw-in').children.length;if(!n){w.remove();return}const d=w.querySelector('.dots');if(d.children.length!==n)d.innerHTML=Array.from({length:n},(_,i)=>`<i${i?'':' class="on"'}></i>`).join('')})}
 function bindWsw(){document.querySelectorAll('.wsw-in').forEach(sw=>{dragScroll(sw);sw.addEventListener('scroll',()=>{const i=Math.round(sw.scrollLeft/sw.clientWidth);[...sw.parentNode.querySelectorAll('.dots i')].forEach((d,j)=>d.classList.toggle('on',j===i))},{passive:true});sw.addEventListener('click',()=>{const n=sw.children.length;if(n<2)return;const i=Math.round(sw.scrollLeft/sw.clientWidth);sw.scrollTo({left:((i+1)%n)*sw.clientWidth,behavior:'smooth'})})})}
-const bannerBottom=()=>`<section class="blk"><div class="grid bn3 nat"><div class="card dc vb" style="grid-column:1/-1">${loopVid('banner/project/1_pc|banner/project/1|banner/project/01')}</div><div class="card dc vb vb1">${loopVid('banner/project/2_mo|banner/project/2|banner/project/02')}</div></div>${descHTML('renewal')}</section>
+const bannerBottom=()=>`<section class="blk"><div class="grid bn3 nat"><div class="card dc vb vb1">${loopVid('banner/project/2_mo|banner/project/2|banner/project/02')}</div></div>${descHTML('renewal')}</section>
 <section class="blk"><div class="grid bn3 nat"><div class="card dc vb vb1">${loopVid('banner/project/3_mo|banner/project/3|banner/project/03')}</div></div>${descHTML('fit')}</section>`;
 const NOTICE='모든 이미지의 저작권은 해당 브랜드에 있으며, 포트폴리오 목적으로만 게시되었습니다.<br class="en"><span class="en">All images are copyrighted by their respective brands and shown for portfolio purposes only.</span>';
 let tab=0;
@@ -467,7 +475,7 @@ const V={
   <div class="tr links mono" onpointerdown="event.stopPropagation()">${PROFILE.links.map(l=>l.copy?`<button onclick="COPY('${l.copy}',this)">${l.label}</button>`:`<a href="${l.href}" target="_blank" rel="noopener">${l.label}</a>`).join('')}</div>
   ${SECTIONS.map((x,i)=>`<div class="it" data-i="${i}"><div class="sl">${x.label}</div><div class="card">${collage(x)}</div></div>`).join('')}
   <div class="ttls">${SECTIONS.map(x=>`<div class="tt"><span>${x.t}</span></div>`).join('')}</div><div class="grain"></div>
-  <div class="cr home mono">${NOTICE}</div><div class="cur mono" id="cur"></div><div class="hint mono">scroll · drag · Z</div></div>`},
+  <div class="cr home mono">${NOTICE}</div><div class="cur mono" id="cur"></div></div>`},
   detail(){const cat=DATA.detail[tab];return `${head('detail')}<div class="ctr">
   <div class="tabs">${DATA.detail.map((c,i)=>`<button class="tab ${i===tab?'on':''}" onclick="setTab(${i})">${c.name}</button>`).join('')}</div>
   <div class="grid narrow">${cat.items.map((o,j)=>`<div><button class="card ar-th" onclick="OPEN('d',${tab},${j})">${im(o.thumb,o.label)}</button></div>`).join('')}</div>
@@ -475,11 +483,11 @@ const V={
   <div class="grid narrow rt1">${cat.retouch.map(r=>`<div class="card ar-th"><div class="sw"><div>${im(r.after,r.label+' 보정본')}</div><div>${im(r.before,r.label+' 원본')}</div></div><span class="dots"><i class="on"></i><i></i></span></div>`).join('')}</div></div>`},
   banner(){const g=(arr,fn)=>`<div class="grid bn3 m3 nat">${arr.map(fn).join('')}</div>`,pl=b=>`<button class="card" onclick="OPENS('${b.src}','${b.label}')">${im(b.src,b.label)}</button>`;
   return `${head('banner')}
-  <h2 style="margin-top:0">시리즈</h2><p class="note">${n2(DATA.bannerSeries.length)}</p>
+  <h2 style="margin-top:0">시리즈</h2>
   ${g(DATA.bannerSeries,pl)}
-  <h2>상세 없음</h2><p class="note">${n2(DATA.bannerPlain.length)}</p>
+  <h2>상세 없음</h2>
   ${g(DATA.bannerPlain,pl)}
-  <h2>상세 있음</h2><p class="note">${n2(DATA.bannerDetail.length)}</p>
+  <h2>상세 있음</h2>
   ${g(DATA.bannerDetail,(b,i)=>`<button class="card" onclick="OPEN('b',${i})"><span class="badge">DETAIL</span>${im(b.src,b.label)}</button>`)}
   ${bannerBottom()}`},
   insta(){return head('insta')+dynGrid('instagram',20,'ar-ig')+`<section class="blk">${wsw(['instagram/swipe/1|instagram/swipe/01','instagram/swipe/2|instagram/swipe/02'])}${descHTML('insta')}</section>`},
@@ -561,7 +569,7 @@ function initStage(){
   (function tick(){
     if(!document.body.contains(st))return;
     const now=performance.now(),dt=Math.max(1,Math.min(50,now-last));last=now;
-    const kp=1-Math.exp(-dt/95),kz=1-Math.exp(-dt/110),ks=1-Math.exp(-dt/130);
+    const kp=1-Math.exp(-dt/70),kz=1-Math.exp(-dt/110),ks=1-Math.exp(-dt/130);
     if(!drag){const df=tgt-pos;pos=Math.abs(df)<.0005?tgt:pos+df*kp}
     z+=((ov?zOv():1)-z)*kz;
     const v=(pos-prev)*16.7/dt;prev=pos;
@@ -578,13 +586,13 @@ function initStage(){
   st.addEventListener('pointermove',e=>{
     st.style.setProperty('--mx',(e.clientX/innerWidth-.5)*2);st.style.setProperty('--my',(e.clientY/innerHeight-.5)*2);
     if(!drag)return;const dx=e.clientX-drag.x;if(Math.abs(dx)>6)moved=true;
-    const raw=drag.p-dx/sp();
+    const raw=drag.p-dx/(sp()*.75);
     pos=raw<0?raw*.35:raw>N-1?N-1+(raw-(N-1))*.35:raw;
     const now=performance.now(),dt=now-lt;if(dt>0){vel=.8*vel+.2*((pos-lp)/dt);lp=pos;lt=now}
   });
   const up=()=>{
     const was=drag;drag=null;
-    if(was&&moved){const b0=Math.round(clamp(was.p));tgt=Math.max(b0-1,Math.min(b0+1,Math.round(clamp(pos+vel*120))));tgt=clamp(tgt);return}
+    if(was&&moved){const b0=Math.round(clamp(was.p)),dd=pos-was.p,fl=vel*120;let t0=b0;if(dd+fl>.16)t0=b0+1;else if(dd+fl<-.16)t0=b0-1;tgt=clamp(t0);return}
     if(downIt){const i=+downIt.dataset.i;
       if(ov){window.__idx=i;setOv(false)}
       else if(i===Math.round(clamp(pos)))go(SECTIONS[i].id)
@@ -602,10 +610,10 @@ function initStage(){
     if(e.ctrlKey){setOv(e.deltaY>0);return}
     if(ov)return;
     const now=performance.now(),d=Math.abs(e.deltaX)>Math.abs(e.deltaY)?e.deltaX:e.deltaY;
-    if(wLock){if(now-wLast>110&&now-wT>550){wLock=false;wAcc=0}else{wLast=now;return}}
+    if(wLock){if(now-wLast>110&&now-wT>420){wLock=false;wAcc=0}else{wLast=now;return}}
     if(now-wLast>200)wAcc=0;
     wLast=now;wAcc+=d;
-    if(Math.abs(wAcc)>=50){const c=Math.round(clamp(tgt));tgt=clamp(c+(wAcc>0?1:-1));wAcc=0;wLock=true;wT=now}
+    if(Math.abs(wAcc)>=32){const c=Math.round(clamp(tgt));tgt=clamp(c+(wAcc>0?1:-1));wAcc=0;wLock=true;wT=now}
   },{passive:false});
   document.addEventListener('keydown',function k(e){
     if(!document.body.contains(st)){document.removeEventListener('keydown',k);return}
