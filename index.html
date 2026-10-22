@@ -297,7 +297,11 @@ body.home .dock{backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);ba
 @media(max-width:700px){.blk+.blk{margin-top:76px}}
 .rs-sec{padding:44px 0}.rs-sec:first-child{padding-top:24px}.rs-sub{margin-bottom:16px}.rs-p{margin-bottom:12px}.rs-it{padding:15px 0}.rs-it:first-child{padding-top:4px}
 @media(max-width:800px){.rs-sec{padding:30px 0}.rs-sec:first-child{padding-top:20px}.rs-it{padding:12px 0}}
-.lbn{margin-top:60px;padding-bottom:30px}
+.lbn{margin-top:90px;padding:28px 0 30px;border-top:1px solid var(--line)}
+.lb .mn{position:fixed;top:calc(env(safe-area-inset-top,0px) + 20px);left:20px;z-index:41;font:400 11px 'IBM Plex Mono',monospace}
+.proj{display:flex;align-items:center;gap:22px;margin:110px 0 8px;font-size:12px;letter-spacing:.2em;color:var(--mute)}
+.proj:before,.proj:after{content:"";flex:1;height:1px;background:var(--line)}
+@media(max-width:700px){.proj{margin:80px 0 4px}.cr.home .ko{font-size:9px}.cr.home .en{font-size:6px}}
 </style>
 </head>
 <body>
@@ -305,7 +309,7 @@ body.home .dock{backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);ba
 <main id="app"></main>
 <div class="pv" id="pv"></div>
 <nav class="dock" id="dock"></nav>
-<div class="lb" id="lb"><button class="x" onclick="closeLb()" aria-label="닫기">CLOSE</button><div class="in" id="lbin"></div><div class="lbcap" id="lbcap"></div></div>
+<div class="lb" id="lb"><button class="mn mono" onclick="hideLb();go('')" aria-label="메인">← Main</button><button class="x" onclick="closeLb()" aria-label="닫기">CLOSE</button><div class="in" id="lbin"></div><div class="lbcap" id="lbcap"></div></div>
 
 <script>
 /* ===== 여기만 수정하면 됩니다 =====
@@ -314,14 +318,14 @@ const PROFILE={
   name:'예원',
   intro:['예원은 이커머스와 크리에이티브 프로덕션을 하는 디자이너입니다.','패션 캠페인, 룩북, 프론트엔드 커스텀, AI 비주얼을 만듭니다.'],
   hero:['예원은','이커머스와','크리에이티브','프로덕션을 하는','디자이너입니다.'],
-  links:[{label:'Email',copy:'your@email.com'},{label:'Instagram',href:'https://instagram.com/yourid'}],
+  links:[{label:'Email',copy:'your@email.com'}],
   mantra:['보기 좋게.','정확하게.','끝까지.','만든다.'],
   resume:[
     {title:'ABOUT',rows:[['소개','여기에 한 줄 소개를 입력하세요.']]},
     {title:'EXPERIENCE',rows:[['20XX–현재','회사명 / 직무'],['20XX–20XX','회사명 / 직무']]},
     {title:'EDUCATION',rows:[['20XX','학교 / 전공']]},
     {title:'SKILLS',rows:[['Design','Photoshop, Illustrator, Figma'],['Dev','HTML, CSS, JS'],['AI','이미지·영상 생성 툴']]},
-    {title:'CONTACT',rows:[['Email','your@email.com'],['Instagram','@yourid']]}
+    {title:'CONTACT',rows:[['Email','your@email.com']]}
   ]
 };
 const CATS=['남성 캐쥬얼','여성 캐쥬얼','여성 가방','스노우','워크웨어','스포츠'];
@@ -465,9 +469,10 @@ const descHTML=k=>`<div class="desc"><h3>${DESC[k][0]}</h3>${DESC[k][1].map(t=>`
 const wsw=bs=>`<div class="wsw"><div class="wsw-in">${bs.map(b=>`<div class="dc">${nimg(b)}</div>`).join('')}</div><span class="dots">${bs.map((_,i)=>`<i${i?'':' class="on"'}></i>`).join('')}</span></div>`;
 function syncWsw(){document.querySelectorAll('.wsw').forEach(w=>{const n=w.querySelector('.wsw-in').children.length;if(!n){w.remove();return}const d=w.querySelector('.dots');if(d.children.length!==n)d.innerHTML=Array.from({length:n},(_,i)=>`<i${i?'':' class="on"'}></i>`).join('')})}
 function bindWsw(){document.querySelectorAll('.wsw-in').forEach(sw=>{dragScroll(sw);sw.addEventListener('scroll',()=>{const i=Math.round(sw.scrollLeft/sw.clientWidth);[...sw.parentNode.querySelectorAll('.dots i')].forEach((d,j)=>d.classList.toggle('on',j===i))},{passive:true});sw.addEventListener('click',()=>{const n=sw.children.length;if(n<2)return;const i=Math.round(sw.scrollLeft/sw.clientWidth);sw.scrollTo({left:((i+1)%n)*sw.clientWidth,behavior:'smooth'})})})}
-const bannerBottom=()=>`<section class="blk"><div class="grid bn3 nat"><div class="card dc vb vb1">${loopVid('banner/project/2_mo|banner/project/2|banner/project/02')}</div></div>${descHTML('renewal')}</section>
+const PROJ='<div class="proj mono"><span>PROJECT</span></div>';
+const bannerBottom=()=>PROJ+`<section class="blk"><div class="grid bn3 nat"><div class="card dc vb vb1">${loopVid('banner/project/2_mo|banner/project/2|banner/project/02')}</div></div>${descHTML('renewal')}</section>
 <section class="blk"><div class="grid bn3 nat"><div class="card dc vb vb1">${loopVid('banner/project/3_mo|banner/project/3|banner/project/03')}</div></div>${descHTML('fit')}</section>`;
-const NOTICE='모든 이미지의 저작권은 해당 브랜드에 있으며, 포트폴리오 목적으로만 게시되었습니다.<br class="en"><span class="en">All images are copyrighted by their respective brands and shown for portfolio purposes only.</span>';
+const NOTICE='<span class="ko">모든 이미지의 저작권은 해당 브랜드에 있으며, 포트폴리오 목적으로만 게시되었습니다.</span><br class="en"><span class="en">All images are copyrighted by their respective brands and shown for portfolio purposes only.</span>';
 let tab=0;
 const V={
   home(){return `<div class="stage" id="stage">
@@ -490,7 +495,7 @@ const V={
   <h2>상세 있음</h2>
   ${g(DATA.bannerDetail,(b,i)=>`<button class="card" onclick="OPEN('b',${i})"><span class="badge">DETAIL</span>${im(b.src,b.label)}</button>`)}
   ${bannerBottom()}`},
-  insta(){return head('insta')+dynGrid('instagram',20,'ar-ig')+`<section class="blk">${wsw(['instagram/swipe/1|instagram/swipe/01','instagram/swipe/2|instagram/swipe/02'])}${descHTML('insta')}</section>`},
+  insta(){return head('insta')+dynGrid('instagram',20,'ar-ig')+PROJ+`<section class="blk">${wsw(['instagram/swipe/1|instagram/swipe/01','instagram/swipe/2|instagram/swipe/02'])}${descHTML('insta')}</section>`},
   pop(){return head('pop')+`<div class="grid narrow nat">${DATA.pop.map(o=>`<button class="card" onclick="OPENS('${o.src}','${o.label}')">${im(o.src,o.label)}</button>`).join('')}</div>`},
   ai(){return head('ai')+`<h2 style="margin-top:0">26FW</h2>`+dynGrid('ai/26FW',24,'ar-th')+`<h2>26SS</h2>`+dynGrid('ai/26SS',24,'ar-th',[],true)+`<h2>Video</h2>`+videoGrid('ai/video',6)},
   resume(){const R=RES,it=(a,n)=>a.map((x,i)=>`<div class="rs-it"><span class="rs-n">${n?n2(i+1):''}</span><div><h4>${x[0]}</h4><p>${x[1]}</p></div></div>`).join('');
