@@ -278,9 +278,17 @@ body,body.home,.lb{background-image:url("data:image/svg+xml;utf8,<svg xmlns='htt
 
 /* home performance */
 body.home .dock{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(14,13,13,.92)}
-.it .card{transition:filter .35s ease}
-.it .card.bw{filter:grayscale(1) sepia(.12) contrast(1.55) brightness(.62)}
 .tt{will-change:opacity,transform}
+
+/* copyright notice */
+.cr{font-size:11px;line-height:1.7;color:var(--mute);text-align:center;letter-spacing:.01em}
+footer.cr{margin-top:90px;padding:28px 0 0;border-top:1px solid var(--line)}
+.cr.home{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 10px);z-index:200;pointer-events:none;width:max-content;max-width:92vw;opacity:.7;font-size:10px}
+@media(max-width:700px){.cr.home{font-size:7.5px;letter-spacing:-.02em;bottom:calc(env(safe-area-inset-bottom,0px) + 6px)}.cur{bottom:calc(env(safe-area-inset-bottom,0px) + 50px)}.cr.home .en{display:none}.cr.home{width:88vw}}
+
+.it .card .bwl{opacity:0;filter:grayscale(1) sepia(.12) contrast(1.55) brightness(.62);pointer-events:none;will-change:opacity}
+.tt span{will-change:transform}
+body.home .dock{backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);background:var(--glass)}
 </style>
 </head>
 <body>
@@ -329,7 +337,7 @@ const SECTIONS=[
   {id:'resume',t:'RESUME',n:'05',label:'이력서',c:''}
 ];
 const COLL={detail:()=>[DATA.detail[0].items[0].thumb,DATA.detail[0].items[1].thumb,DATA.detail[1].items[0].thumb],banner:()=>DATA.bannerSeries.slice(0,1).map(o=>o.src),insta:()=>[I('instagram/01.jpg')],pop:()=>DATA.pop.slice(0,3).map(o=>o.src),ai:()=>[I('ai/26FW/01.jpg')],resume:()=>[I('resume/1.jpg')]};
-const collage=x=>{const a=COLL[x.id]();return im(a.length?a[0]:'',x.label)};
+const collage=x=>{const a=COLL[x.id]();return im(a.length?a[0]:'',x.label)+(a.length?`<img class="bwl" src="${a[0]}" alt="" decoding="async" onerror="this.remove()">`:'')};
 /* ===== 렌더링 ===== */
 const $=s=>document.querySelector(s),app=$('#app'),pv=$('#pv');
 const ERR="this.replaceWith(Object.assign(document.createElement('div'),{className:'ph',textContent:this.alt}))";
@@ -450,6 +458,7 @@ function syncWsw(){document.querySelectorAll('.wsw').forEach(w=>{const n=w.query
 function bindWsw(){document.querySelectorAll('.wsw-in').forEach(sw=>{dragScroll(sw);sw.addEventListener('scroll',()=>{const i=Math.round(sw.scrollLeft/sw.clientWidth);[...sw.parentNode.querySelectorAll('.dots i')].forEach((d,j)=>d.classList.toggle('on',j===i))},{passive:true});sw.addEventListener('click',()=>{const n=sw.children.length;if(n<2)return;const i=Math.round(sw.scrollLeft/sw.clientWidth);sw.scrollTo({left:((i+1)%n)*sw.clientWidth,behavior:'smooth'})})})}
 const bannerBottom=()=>`<section class="blk"><div class="grid bn3 nat"><div class="card dc vb" style="grid-column:1/-1">${loopVid('banner/project/1_pc|banner/project/1|banner/project/01')}</div><div class="card dc vb vb1">${loopVid('banner/project/2_mo|banner/project/2|banner/project/02')}</div></div>${descHTML('renewal')}</section>
 <section class="blk"><div class="grid bn3 nat"><div class="card dc vb vb1">${loopVid('banner/project/3_mo|banner/project/3|banner/project/03')}</div></div>${descHTML('fit')}</section>`;
+const NOTICE='모든 이미지의 저작권은 해당 브랜드에 있으며, 포트폴리오 목적으로만 게시되었습니다.<br class="en"><span class="en">All images are copyrighted by their respective brands and shown for portfolio purposes only.</span>';
 let tab=0;
 const V={
   home(){return `<div class="stage" id="stage">
@@ -457,7 +466,7 @@ const V={
   <div class="tr links mono" onpointerdown="event.stopPropagation()">${PROFILE.links.map(l=>l.copy?`<button onclick="COPY('${l.copy}',this)">${l.label}</button>`:`<a href="${l.href}" target="_blank" rel="noopener">${l.label}</a>`).join('')}</div>
   ${SECTIONS.map((x,i)=>`<div class="it" data-i="${i}"><div class="sl">${x.label}</div><div class="card">${collage(x)}</div></div>`).join('')}
   <div class="ttls">${SECTIONS.map(x=>`<div class="tt"><span>${x.t}</span></div>`).join('')}</div><div class="grain"></div>
-  <div class="cur mono" id="cur"></div><div class="hint mono">scroll · drag · Z</div></div>`},
+  <div class="cr home mono">${NOTICE}</div><div class="cur mono" id="cur"></div><div class="hint mono">scroll · drag · Z</div></div>`},
   detail(){const cat=DATA.detail[tab];return `${head('detail')}<div class="ctr">
   <div class="tabs">${DATA.detail.map((c,i)=>`<button class="tab ${i===tab?'on':''}" onclick="setTab(${i})">${c.name}</button>`).join('')}</div>
   <div class="grid narrow">${cat.items.map((o,j)=>`<div><button class="card ar-th" onclick="OPEN('d',${tab},${j})">${im(o.thumb,o.label)}</button></div>`).join('')}</div>
@@ -472,7 +481,7 @@ const V={
   <h2>상세 있음</h2><p class="note">${n2(DATA.bannerDetail.length)}</p>
   ${g(DATA.bannerDetail,(b,i)=>`<button class="card" onclick="OPEN('b',${i})"><span class="badge">DETAIL</span>${im(b.src,b.label)}</button>`)}
   ${bannerBottom()}`},
-  insta(){return head('insta')+dynGrid('instagram',30,'ar-ig')+`<section class="blk">${wsw(['instagram/swipe/1|instagram/swipe/01','instagram/swipe/2|instagram/swipe/02'])}${descHTML('insta')}</section>`},
+  insta(){return head('insta')+dynGrid('instagram',20,'ar-ig')+`<section class="blk">${wsw(['instagram/swipe/1|instagram/swipe/01','instagram/swipe/2|instagram/swipe/02'])}${descHTML('insta')}</section>`},
   pop(){return head('pop')+`<div class="grid narrow nat">${DATA.pop.map(o=>`<button class="card" onclick="OPENS('${o.src}','${o.label}')">${im(o.src,o.label)}</button>`).join('')}</div>`},
   ai(){return head('ai')+`<h2 style="margin-top:0">26FW</h2>`+dynGrid('ai/26FW',24,'ar-th')+`<h2>26SS</h2>`+dynGrid('ai/26SS',24,'ar-th',[],true)+`<h2>Video</h2>`+videoGrid('ai/video',6)},
   resume(){const R=RES,it=(a,n)=>a.map((x,i)=>`<div class="rs-it"><span class="rs-n">${n?n2(i+1):''}</span><div><h4>${x[0]}</h4><p>${x[1]}</p></div></div>`).join('');
@@ -514,8 +523,8 @@ function setupRuler(k){
 }
 window.__idx=0;
 function initStage(){
-  const st=$('#stage'),its=[...st.querySelectorAll('.it')],tts=[...st.querySelectorAll('.tt')],cds=its.map(e=>e.querySelector('.card')),N=its.length,cur=$('#cur'),rul=$('#ruler');
-  let pos=window.__idx,tgt=pos,ov=false,z=1,shr=1,prev=pos,drag=null,moved=false,downIt=null,vel=0,lp=0,lt=0,wt,shown=-1,scr=false;
+  const st=$('#stage'),its=[...st.querySelectorAll('.it')],tts=[...st.querySelectorAll('.tt')],cds=its.map(e=>e.querySelector('.card')),bwl=its.map(e=>e.querySelector('.bwl')),N=its.length,cur=$('#cur'),rul=$('#ruler');
+  let last=performance.now(),pos=window.__idx,tgt=pos,ov=false,z=1,shr=1,prev=pos,drag=null,moved=false,downIt=null,vel=0,lp=0,lt=0,wt,shown=-1,scr=false;
   const GAP=36,clamp=v=>Math.max(0,Math.min(N-1,v)),sp=()=>its[0].offsetWidth+GAP,zOv=()=>Math.min(1,innerWidth*.88/(N*sp()));
   const MOB=()=>innerWidth<=700,KS=()=>MOB()?.1:.25,DYf=(p=0)=>MOB()?40*Math.max(0,1-p):36;
   function fit(){
@@ -539,23 +548,25 @@ function initStage(){
     const w=sp(),sc=z*shr;
     its.forEach((el,i)=>{el.style.transform=`translate(-50%,-50%) translate(${(i-pos)*w*sc}px,${DYf(pos)}px) scale(${sc})`});
     const f=Math.max(0,Math.min(1,(z-.45)/.4)),H=st.clientHeight,ch=cds[0].offsetHeight*sc,top=H/2-ch/2+DYf(pos);
-    const near=Math.round(clamp(pos));
     its.forEach((el,i)=>{const d=Math.abs(i-pos);
-      cds[i].classList.toggle('bw',f>.5&&i!==near);
+      const g=(Math.min(1,d*1.5)*f).toFixed(3),bl=bwl[i];if(bl&&bl._g!==g){bl._g=g;bl.style.opacity=g}
       const o=Math.max(0,1-d*1.9)*f,t=tts[i];t.style.opacity=o;t.style.top=top+'px';
-      t.style.transform=`translate(-50%,-100%) translateY(${-d*26}px)`});
+      t.style.transform=`translate(-50%,-100%) translateY(${-d*26}px)`;
+      const b=o>.02&&d>.02?`blur(${(d*7).toFixed(1)}px)`:'none';if(t._b!==b){t._b=b;t.style.filter=b}});
     paintRuler(rul,clamp(pos));
     const c=Math.round(clamp(pos));
     if(c!==shown){shown=c;cur.innerHTML=SECTIONS[c].label}
   }
   (function tick(){
     if(!document.body.contains(st))return;
-    if(!drag){const df=tgt-pos;pos=Math.abs(df)<.0005?tgt:pos+df*.22}
-    z+=((ov?zOv():1)-z)*.14;
-    const v=pos-prev;prev=pos;
+    const now=performance.now(),dt=Math.max(1,Math.min(50,now-last));last=now;
+    const kp=1-Math.exp(-dt/95),kz=1-Math.exp(-dt/110),ks=1-Math.exp(-dt/130);
+    if(!drag){const df=tgt-pos;pos=Math.abs(df)<.0005?tgt:pos+df*kp}
+    z+=((ov?zOv():1)-z)*kz;
+    const v=(pos-prev)*16.7/dt;prev=pos;
     const ends=Math.max(0,Math.min(pos,N-1-pos)),base=1-KS()*Math.min(ends,1);
     const goal=base*(1-Math.min(Math.abs(v)*6,.25));
-    shr+=(goal-shr)*.18;
+    shr+=(goal-shr)*ks;
     paint();requestAnimationFrame(tick)
   })();
   rul.onclick=null;
@@ -612,7 +623,7 @@ function render(){
   if(k==='detail')tab=Math.max(0,Math.min(CATS.length-1,+sub||0));
   if(k!=='home')window.__idx=SECTIONS.findIndex(x=>x.id===k);
   app.style.animation='none';app.offsetHeight;app.style.animation='';
-  app.innerHTML=V[k]();PV('',0);
+  app.innerHTML=V[k]()+(k==='home'?'':`<footer class="cr mono">${NOTICE}</footer>`);PV('',0);
   document.querySelectorAll('.dock button').forEach(b=>b.classList.toggle('on',b.dataset.k===(k==='home'?'':k)));
   document.body.classList.toggle('home',k==='home');
   scrollTo(0,0);
