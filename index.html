@@ -235,14 +235,14 @@ body.home .dock{z-index:210}
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
 .grain{position:absolute;inset:0;z-index:150;pointer-events:none;
   background:radial-gradient(ellipse at 50% 45%,transparent 50%,rgba(0,0,0,.6) 100%)}
-.grain:before{content:"";position:absolute;inset:0;opacity:.2;mix-blend-mode:screen;
+.grain:before{content:"";position:absolute;inset:0;opacity:.2;
   background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='260' height='260'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .9 -.25'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
 .grain:after{content:"";position:absolute;inset:0;opacity:.035;background:repeating-linear-gradient(0deg,#fff 0 1px,transparent 1px 3px)}
 
 /* ===== 전체 페이지: 블랙 빈티지 배경 ===== */
 :root:root:root{--bg:#0a0909;--fg:#ededed;--mute:#8a8585;--line:#2a2727;--card:#171616;--glass:rgba(14,13,13,.78);--stage:#141212;--slide:#1a1818}
 body{background:var(--bg)}
-body.home::before{content:"";position:fixed;inset:0;z-index:1000;pointer-events:none;opacity:.12;mix-blend-mode:screen;
+body.home::before{content:"";position:fixed;inset:0;z-index:1000;pointer-events:none;opacity:.12;
   background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='260' height='260'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .9 -.25'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
 body.home::after{content:"";position:fixed;inset:0;z-index:1000;pointer-events:none;opacity:.035;background:repeating-linear-gradient(0deg,#fff 0 1px,transparent 1px 3px)}
 .grain:before,.grain:after{display:none}
@@ -275,6 +275,12 @@ body,body.home,.lb{background-image:url("data:image/svg+xml;utf8,<svg xmlns='htt
 .rs-it:last-child{border-bottom:0}
 .rs-sec:first-child{border-top:0;padding-top:24px}
 @media(max-width:700px){.rt1{grid-template-columns:1fr}}
+
+/* home performance */
+body.home .dock{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(14,13,13,.92)}
+.it .card{transition:filter .35s ease}
+.it .card.bw{filter:grayscale(1) sepia(.12) contrast(1.55) brightness(.62)}
+.tt{will-change:opacity,transform}
 </style>
 </head>
 <body>
@@ -420,11 +426,11 @@ const flat=(arr,ar)=>`<div class="grid g4">${arr.flat().map(o=>`<button class="c
 
 /* ===== 확장자 자동 탐색 · 동적 그리드 · 설명 ===== */
 const EXTS=['jpg','gif','png','webp'];
-const cand=b=>b.split('|').flatMap(x=>EXTS.map(e=>I(x)+'.'+e));
+const cand=b=>[...new Set(b.split('|').flatMap(x=>EXTS.map(e=>I(x)+'.'+e)))];
 const nimg=(b,alt)=>{const c=cand(b);return `<img src="${c[0]}" data-c="${c.join(',')}" data-k="0" alt="${alt||''}" decoding="async" loading="lazy" onerror="nx(this)">`};
 function nx(img){const c=img.dataset.c.split(','),k=+img.dataset.k+1;if(k<c.length){img.dataset.k=k;img.src=c[k]}else{const r=img.closest('.dc');if(r){r.remove();syncWsw()}}}
 window.ZM=el=>{const i=el.querySelector('img');if(i)lb(i.getAttribute('src'),'')};
-const dynGrid=(dir,max,ar,skip=[])=>`<div class="grid bn3">${Array.from({length:max},(_,i)=>i+1).filter(n=>!skip.includes(n)).map(n=>`<button class="card dc ${ar}" onclick="ZM(this)">${nimg(dir+'/'+n2(n))}</button>`).join('')}</div>`;
+const dynGrid=(dir,max,ar,skip=[],un=false)=>`<div class="grid bn3">${Array.from({length:max},(_,i)=>i+1).filter(n=>!skip.includes(n)).map(n=>`<button class="card dc ${ar}" onclick="ZM(this)">${nimg(un?dir+'/'+n+'|'+dir+'/'+n2(n):dir+'/'+n2(n))}</button>`).join('')}</div>`;
 const VIDEO_RATIO='212 / 140';
 const VEXT=['mp4','webm','mov'];
 const vcand=b=>b.split('|').flatMap(x=>VEXT.map(e=>I(x)+'.'+e));
@@ -468,7 +474,7 @@ const V={
   ${bannerBottom()}`},
   insta(){return head('insta')+dynGrid('instagram',30,'ar-ig')+`<section class="blk">${wsw(['instagram/swipe/1|instagram/swipe/01','instagram/swipe/2|instagram/swipe/02'])}${descHTML('insta')}</section>`},
   pop(){return head('pop')+`<div class="grid narrow nat">${DATA.pop.map(o=>`<button class="card" onclick="OPENS('${o.src}','${o.label}')">${im(o.src,o.label)}</button>`).join('')}</div>`},
-  ai(){return head('ai')+`<h2 style="margin-top:0">26FW</h2>`+dynGrid('ai/26FW',24,'ar-th')+`<h2>26SS</h2>`+dynGrid('ai/26SS',24,'ar-th')+`<h2>Video</h2>`+videoGrid('ai/video',6)},
+  ai(){return head('ai')+`<h2 style="margin-top:0">26FW</h2>`+dynGrid('ai/26FW',24,'ar-th')+`<h2>26SS</h2>`+dynGrid('ai/26SS',24,'ar-th',[],true)+`<h2>Video</h2>`+videoGrid('ai/video',6)},
   resume(){const R=RES,it=(a,n)=>a.map((x,i)=>`<div class="rs-it"><span class="rs-n">${n?n2(i+1):''}</span><div><h4>${x[0]}</h4><p>${x[1]}</p></div></div>`).join('');
   return `${head('resume')}<div class="rs">
   <section class="rs-sec"><h2 class="pk">ABOUT</h2><div><p class="rs-sub">${R.about.sub}</p>${R.about.p.map(t=>`<p class="rs-p">${t}</p>`).join('')}</div></section>
@@ -533,22 +539,23 @@ function initStage(){
     const w=sp(),sc=z*shr;
     its.forEach((el,i)=>{el.style.transform=`translate(-50%,-50%) translate(${(i-pos)*w*sc}px,${DYf(pos)}px) scale(${sc})`});
     const f=Math.max(0,Math.min(1,(z-.45)/.4)),H=st.clientHeight,ch=cds[0].offsetHeight*sc,top=H/2-ch/2+DYf(pos);
-    its.forEach((el,i)=>{const d=Math.abs(i-pos),g=Math.min(1,d*1.5)*f;
-      cds[i].style.filter=g>.01?`grayscale(${g}) sepia(${(.12*g).toFixed(3)}) contrast(${1+.55*g}) brightness(${1-.38*g})`:'none';
-      const o=Math.max(0,1-d*1.9)*f,t=tts[i];t.style.opacity=o;t.style.top=(top-4+(t._fs||0)*.09)+'px';
-      t.style.transform=`translate(-50%,-100%) translateY(${-d*26}px)`;t.style.filter=d>.02?`blur(${(d*7).toFixed(1)}px)`:'none'});
+    const near=Math.round(clamp(pos));
+    its.forEach((el,i)=>{const d=Math.abs(i-pos);
+      cds[i].classList.toggle('bw',f>.5&&i!==near);
+      const o=Math.max(0,1-d*1.9)*f,t=tts[i];t.style.opacity=o;t.style.top=top+'px';
+      t.style.transform=`translate(-50%,-100%) translateY(${-d*26}px)`});
     paintRuler(rul,clamp(pos));
     const c=Math.round(clamp(pos));
     if(c!==shown){shown=c;cur.innerHTML=SECTIONS[c].label}
   }
   (function tick(){
     if(!document.body.contains(st))return;
-    if(!drag){const df=tgt-pos;pos=Math.abs(df)<.0005?tgt:pos+df*.14}
+    if(!drag){const df=tgt-pos;pos=Math.abs(df)<.0005?tgt:pos+df*.22}
     z+=((ov?zOv():1)-z)*.14;
     const v=pos-prev;prev=pos;
     const ends=Math.max(0,Math.min(pos,N-1-pos)),base=1-KS()*Math.min(ends,1);
     const goal=base*(1-Math.min(Math.abs(v)*6,.25));
-    shr+=(goal-shr)*.12;
+    shr+=(goal-shr)*.18;
     paint();requestAnimationFrame(tick)
   })();
   rul.onclick=null;
