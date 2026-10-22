@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>무제</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=Inter:wght@400;500&family=Noto+Sans+KR:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=Anybody:wdth,wght@75,900&family=Anton&family=Inter:wght@400;500&family=Noto+Sans+KR:wght@400;500&display=swap">
 <style>
 :root{--bg:#fcfcfc;--fg:#111;--mute:#8f8f8f;--line:#e6e6e6;--card:#f0f0f0;--glass:rgba(252,252,252,.72);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a0a0a;--fg:#ededed;--mute:#7c7c7c;--line:#242424;--card:#161616;--glass:rgba(10,10,10,.72)}}
@@ -215,9 +215,30 @@ body.home{overflow:hidden;background:var(--stage)}
 .desc h3{font-size:13px;font-weight:500;margin-bottom:8px}
 .desc p{font-size:13px;line-height:1.75;color:var(--mute);margin-bottom:10px;word-break:keep-all}
 .lb video{background:#000}
+
+/* ===== HOME: black vintage + pink titles ===== */
+body.home{--bg:#0a0909;--fg:#ededed;--mute:#8a8585;--line:#242222;--card:#161515;--glass:rgba(14,13,13,.78);--stage:#141212;background:#0b0a0a}
+body.home .dock{z-index:210}
+.sl{display:none}
+.ttls{position:absolute;inset:0;pointer-events:none;z-index:120}
+.tt{position:absolute;left:50%;top:50%;white-space:nowrap;opacity:0;will-change:opacity,transform,filter;
+  font-family:'Anybody','Anton','Impact','Arial Narrow',sans-serif;font-weight:900;font-stretch:75%;font-size:min(16vw,24svh);line-height:.95;letter-spacing:-.005em;text-transform:uppercase}
+.tt span{display:inline-block;filter:url(#rough);
+  background:
+   url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='w'><feTurbulence type='fractalNoise' baseFrequency='.55' numOctaves='2' seed='7'/><feColorMatrix values='0 0 0 0 .12  0 0 0 0 .02  0 0 0 0 .1  0 0 0 -3.2 1.3'/></filter><rect width='100%' height='100%' filter='url(%23w)'/></svg>"),
+   repeating-linear-gradient(45deg,rgba(70,0,40,.17) 0 .8px,transparent .8px 2.6px),
+   repeating-linear-gradient(-45deg,rgba(70,0,40,.17) 0 .8px,transparent .8px 2.6px),
+   linear-gradient(180deg,#f19acd,#e585bd);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+.grain{position:absolute;inset:0;z-index:150;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 45%,transparent 50%,rgba(0,0,0,.6) 100%)}
+.grain:before{content:"";position:absolute;inset:0;opacity:.2;mix-blend-mode:screen;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='260' height='260'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .9 -.25'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+.grain:after{content:"";position:absolute;inset:0;opacity:.035;background:repeating-linear-gradient(0deg,#fff 0 1px,transparent 1px 3px)}
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="rough" x="-2%" y="-2%" width="104%" height="104%"><feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="2" seed="4" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="3.2"/></filter></svg>
 <main id="app"></main>
 <div class="pv" id="pv"></div>
 <nav class="dock" id="dock"></nav>
@@ -255,11 +276,11 @@ const DATA={
   pop:L('pop',["01.jpg", "02.jpg"],'POP')
 };
 const SECTIONS=[
-  {id:'detail',n:'01',label:'썸네일 + 상세',c:'12'},
-  {id:'ai',n:'02',label:'AI Image',c:''},
-  {id:'insta',n:'03',label:'Instagram',c:''},
-  {id:'banner',n:'04',label:'모바일 배너',c:'24'},
-  {id:'resume',n:'05',label:'이력서',c:'—'}
+  {id:'detail',t:'DETAIL',n:'01',label:'썸네일 + 상세',c:'12'},
+  {id:'ai',t:'AI IMAGE',n:'02',label:'AI Image',c:''},
+  {id:'insta',t:'INSTAGRAM',n:'03',label:'Instagram',c:''},
+  {id:'banner',t:'BANNER',n:'04',label:'모바일 배너',c:'24'},
+  {id:'resume',t:'RESUME',n:'05',label:'이력서',c:'—'}
 ];
 const COLL={detail:()=>[DATA.detail[0].items[0].thumb,DATA.detail[0].items[1].thumb,DATA.detail[1].items[0].thumb],banner:()=>DATA.bannerSeries.slice(0,1).map(o=>o.src),insta:()=>[I('instagram/01.jpg')],pop:()=>DATA.pop.slice(0,3).map(o=>o.src),ai:()=>[I('ai/26FW/01.jpg')],resume:()=>[]};
 const collage=x=>{const a=COLL[x.id]();return im(a.length?a[0]:'',x.label)};
@@ -388,8 +409,8 @@ const V={
   home(){return `<div class="stage" id="stage">
   <div class="tl mono">무제</div>
   <div class="tr links mono" onpointerdown="event.stopPropagation()">${PROFILE.links.map(l=>l.copy?`<button onclick="COPY('${l.copy}',this)">${l.label}</button>`:`<a href="${l.href}" target="_blank" rel="noopener">${l.label}</a>`).join('')}</div>
-  <div class="plus"></div>
   ${SECTIONS.map((x,i)=>`<div class="it" data-i="${i}"><div class="sl">${x.label}</div><div class="card">${collage(x)}</div></div>`).join('')}
+  <div class="ttls">${SECTIONS.map(x=>`<div class="tt"><span>${x.t}</span></div>`).join('')}</div><div class="grain"></div>
   <div class="cur mono" id="cur"></div><div class="hint mono">scroll · drag · Z</div></div>`},
   detail(){const cat=DATA.detail[tab];return `${head('detail')}<div class="ctr">
   <div class="tabs">${DATA.detail.map((c,i)=>`<button class="tab ${i===tab?'on':''}" onclick="setTab(${i})">${c.name}</button>`).join('')}</div>
@@ -434,13 +455,18 @@ function setupRuler(k){
 }
 window.__idx=0;
 function initStage(){
-  const st=$('#stage'),its=[...st.querySelectorAll('.it')],N=its.length,cur=$('#cur'),rul=$('#ruler');
+  const st=$('#stage'),its=[...st.querySelectorAll('.it')],tts=[...st.querySelectorAll('.tt')],cds=its.map(e=>e.querySelector('.card')),N=its.length,cur=$('#cur'),rul=$('#ruler');
   let pos=window.__idx,tgt=pos,ov=false,z=1,shr=1,prev=pos,drag=null,moved=false,downIt=null,vel=0,lp=0,lt=0,wt,shown=-1,scr=false;
   const GAP=36,clamp=v=>Math.max(0,Math.min(N-1,v)),sp=()=>its[0].offsetWidth+GAP,zOv=()=>Math.min(1,innerWidth*.88/(N*sp()));
   function setOv(on){if(on===ov)return;ov=on;if(on){window.__idx=Math.round(clamp(pos));tgt=(N-1)/2}else tgt=Math.round(clamp(window.__idx))}
   function paint(){
     const w=sp(),sc=z*shr;
     its.forEach((el,i)=>{el.style.transform=`translate(-50%,-50%) translateX(${(i-pos)*w*sc}px) scale(${sc})`});
+    const f=Math.max(0,Math.min(1,(z-.45)/.4)),H=st.clientHeight,ch=cds[0].offsetHeight*sc,top=H/2-ch/2+ch*.1;
+    its.forEach((el,i)=>{const d=Math.abs(i-pos),g=Math.min(1,d*1.5)*f;
+      cds[i].style.filter=g>.01?`grayscale(${g}) sepia(${(.12*g).toFixed(3)}) contrast(${1+.55*g}) brightness(${1-.38*g})`:'none';
+      const o=Math.max(0,1-d*1.9)*f,t=tts[i];t.style.opacity=o;t.style.top=top+'px';
+      t.style.transform=`translate(-50%,-100%) translateY(${-d*26}px)`;t.style.filter=d>.02?`blur(${(d*7).toFixed(1)}px)`:'none'});
     paintRuler(rul,clamp(pos));
     const c=Math.round(clamp(pos));
     if(c!==shown){shown=c;cur.innerHTML=SECTIONS[c].label}
