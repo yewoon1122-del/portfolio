@@ -356,6 +356,7 @@ const SECTIONS=[
   {id:'resume',t:'RESUME',n:'05',label:'이력서',c:''}
 ];
 const COLL={detail:()=>[DATA.detail[0].items[0].thumb,DATA.detail[0].items[1].thumb,DATA.detail[1].items[0].thumb],banner:()=>DATA.bannerSeries.slice(0,1).map(o=>o.src),insta:()=>[I('instagram/01.jpg')],pop:()=>DATA.pop.slice(0,3).map(o=>o.src),ai:()=>[I('ai/26FW/01.jpg')],resume:()=>[I('resume/1.jpg')]};
+SECTIONS.forEach((x,i)=>{COLL[x.id]=()=>[I('index/'+(i+1)+'.jpg')]});
 const collage=x=>{const a=COLL[x.id]();return im(a.length?a[0]:'',x.label)+(a.length?`<img class="bwl" src="${a[0]}" alt="" decoding="async" onerror="this.remove()">`:'')};
 /* ===== 렌더링 ===== */
 const $=s=>document.querySelector(s),app=$('#app'),pv=$('#pv');
