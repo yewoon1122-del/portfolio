@@ -218,6 +218,7 @@ body.home{overflow:hidden;background:var(--stage)}
 .desc h4{font-size:17px;font-weight:600;color:#d6d1d1;line-height:1.5;margin:-2px 0 14px;word-break:keep-all}
 @media(max-width:700px){.desc h4{font-size:14px;margin-bottom:10px}.desc h3{font-size:17px;margin-bottom:10px}.desc p{font-size:13.5px;line-height:1.75;margin-bottom:12px}}
 .wsw{margin-left:auto;margin-right:auto}
+.wn{text-align:center;font-size:14px;margin:0 0 14px}
 .lb video{background:#000}
 
 /* ===== HOME: black vintage + pink titles ===== */
@@ -470,8 +471,8 @@ const DESC={
 };
 const descHTML=k=>{const d=DESC[k];return `<div class="desc"><h3>${d[0]}</h3>${d[1].map((t,i)=>d[2]&&!i?`<h4>${t}</h4>`:`<p>${t}</p>`).join('')}</div>`};
 const MN=(dir,n,nm)=>Array.from({length:n},(_,i)=>`${dir}/${nm}${i+1}|${dir}/${nm}${n2(i+1)}|${dir}/${nm}_${i+1}`);
-const wsw=bs=>`<div class="wsw"><div class="wsw-in">${bs.map(b=>`<div class="dc">${nimg(b)}</div>`).join('')}</div><span class="dots">${bs.map((_,i)=>`<i${i?'':' class="on"'}></i>`).join('')}</span></div>`;
-function syncWsw(){document.querySelectorAll('.wsw').forEach(w=>{const n=w.querySelector('.wsw-in').children.length;if(!n){w.remove();return}const d=w.querySelector('.dots');if(d.children.length!==n)d.innerHTML=Array.from({length:n},(_,i)=>`<i${i?'':' class="on"'}></i>`).join('')})}
+const wsw=bs=>`<div class="wsww"><p class="note wn">swipe →</p><div class="wsw"><div class="wsw-in">${bs.map(b=>`<div class="dc">${nimg(b)}</div>`).join('')}</div><span class="dots">${bs.map((_,i)=>`<i${i?'':' class="on"'}></i>`).join('')}</span></div></div>`;
+function syncWsw(){document.querySelectorAll('.wsw').forEach(w=>{const n=w.querySelector('.wsw-in').children.length;if(!n){(w.parentNode.classList.contains('wsww')?w.parentNode:w).remove();return}const d=w.querySelector('.dots');if(d.children.length!==n)d.innerHTML=Array.from({length:n},(_,i)=>`<i${i?'':' class="on"'}></i>`).join('')})}
 function bindWsw(){document.querySelectorAll('.wsw-in').forEach(sw=>{dragScroll(sw);sw.addEventListener('scroll',()=>{const i=Math.round(sw.scrollLeft/sw.clientWidth);[...sw.parentNode.querySelectorAll('.dots i')].forEach((d,j)=>d.classList.toggle('on',j===i))},{passive:true});sw.addEventListener('click',()=>{const n=sw.children.length;if(n<2)return;const i=Math.round(sw.scrollLeft/sw.clientWidth);sw.scrollTo({left:((i+1)%n)*sw.clientWidth,behavior:'smooth'})})})}
 const PROJ='<div class="proj mono"><span>PROJECT</span></div>';
 const bannerBottom=()=>PROJ+`<section class="blk"><div class="grid bn3 nat"><div class="card dc vb vb1">${loopVid('banner/project/2_mo|banner/project/2|banner/project/02')}</div></div>${descHTML('renewal')}</section>
