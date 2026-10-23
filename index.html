@@ -179,7 +179,7 @@ body.home{overflow:hidden;background:var(--stage)}
 .pd li:before{content:"";position:absolute;left:0;top:.8em;width:3px;height:3px;border-radius:50%;background:var(--mute)}
 .pd-miss{padding:28px 12px;text-align:center;font:400 11px 'IBM Plex Mono',monospace;color:var(--mute);background:var(--card);margin-bottom:2px;word-break:break-all}
 /* product: swipe thumbnails on top */
-.pd-swrap{position:relative;width:100%;margin:0 0 48px}
+.pd-swrap{position:relative;width:100%;margin:0}
 .pd-sw{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;aspect-ratio:5/6;cursor:pointer}
 .pd-sw::-webkit-scrollbar{display:none}
 .pd-sw>div{flex:0 0 100%;position:relative;scroll-snap-align:start;background:var(--card)}
@@ -221,6 +221,7 @@ body.home{overflow:hidden;background:var(--stage)}
 .wsw{margin-left:auto;margin-right:auto}
 .wsw.bd{border:1px solid rgba(255,255,255,.6)}
 .wcap{text-align:center;font-size:11px;color:var(--mute);margin:14px 0 0;letter-spacing:.02em;word-break:keep-all}
+.wsw .dots i{background:#fff;opacity:.5}.wsw .dots i.on{opacity:1}.wsw .dots.bk i{background:#000}
 .wn{text-align:center;font-size:14px;margin:-16px 0 28px}
 @media(max-width:700px){.wn{margin:-12px 0 28px}}
 .lb video{background:#000}
@@ -315,7 +316,7 @@ body.home .dock{backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);ba
 <main id="app"></main>
 <div class="pv" id="pv"></div>
 <nav class="dock" id="dock"></nav>
-<div class="lb" id="lb"><button class="mn mono" onclick="hideLb();go('')" aria-label="메인">← Main</button><button class="x" onclick="closeLb()" aria-label="닫기">CLOSE</button><div class="in" id="lbin"></div><div class="lbcap" id="lbcap"></div></div>
+<div class="lb" id="lb"><button class="mn mono" onclick="closeLb()" aria-label="뒤로">← Back</button><button class="x" onclick="closeLb()" aria-label="닫기">CLOSE</button><div class="in" id="lbin"></div><div class="lbcap" id="lbcap"></div></div>
 
 <script>
 /* ===== 여기만 수정하면 됩니다 =====
@@ -477,14 +478,17 @@ const DESC={
 const descT=k=>`<div class="desc dt"><h3>${DESC[k][0]}</h3></div>`;
 const descB=k=>{const d=DESC[k];return `<div class="desc db">${d[1].map((t,i)=>d[2]&&!i?`<h4>${t}</h4>`:`<p>${t}</p>`).join('')}</div>`};
 const blkOf=(k,m,c)=>`<section class="blk">${descT(k)}${m}${c?`<p class="wcap mono">${c}</p>`:''}${descB(k)}</section>`;
-const MN=(dir,n,nm)=>Array.from({length:n},(_,i)=>`${dir}/${nm}${i+1}|${dir}/${nm}${n2(i+1)}|${dir}/${nm}_${i+1}`);
+const MN=(dir,n,nm,f=1)=>Array.from({length:n-f+1},(_,k)=>{const i=k+f-1;return `${dir}/${nm}${i+1}|${dir}/${nm}${n2(i+1)}|${dir}/${nm}_${i+1}`});
 const wsw=(bs,c='')=>`<div class="wsww"><p class="note wn">swipe →</p><div class="wsw ${c}"><div class="wsw-in">${bs.map(b=>`<div class="dc">${nimg(b)}</div>`).join('')}</div><span class="dots">${bs.map((_,i)=>`<i${i?'':' class="on"'}></i>`).join('')}</span></div></div>`;
+function paintW(w){const sw=w.querySelector('.wsw-in'),d=w.querySelector('.dots');if(!sw||!d)return;const i=Math.round(sw.scrollLeft/(sw.clientWidth||1)),img=sw.children[i]&&sw.children[i].querySelector('img');if(!img||!img.naturalWidth)return;
+ try{const c=document.createElement('canvas');c.width=16;c.height=6;const x=c.getContext('2d');x.drawImage(img,img.naturalWidth*.3,img.naturalHeight*.9,img.naturalWidth*.4,img.naturalHeight*.1,0,0,16,6);const px=x.getImageData(0,0,16,6).data;let t=0;for(let k=0;k<px.length;k+=4)t+=.2126*px[k]+.7152*px[k+1]+.0722*px[k+2];
+ d.classList.toggle('bk',t/(px.length/4)>135&&img.clientHeight>=w.clientHeight-2)}catch(e){d.classList.remove('bk')}}
 function syncWsw(){document.querySelectorAll('.wsw').forEach(w=>{const n=w.querySelector('.wsw-in').children.length;if(!n){(w.parentNode.classList.contains('wsww')?w.parentNode:w).remove();return}const d=w.querySelector('.dots');if(d.children.length!==n)d.innerHTML=Array.from({length:n},(_,i)=>`<i${i?'':' class="on"'}></i>`).join('')})}
-function bindWsw(){document.querySelectorAll('.wsw-in').forEach(sw=>{dragScroll(sw);sw.addEventListener('scroll',()=>{const i=Math.round(sw.scrollLeft/sw.clientWidth);[...sw.parentNode.querySelectorAll('.dots i')].forEach((d,j)=>d.classList.toggle('on',j===i))},{passive:true});sw.addEventListener('click',()=>{const n=sw.children.length;if(n<2)return;const i=Math.round(sw.scrollLeft/sw.clientWidth);sw.scrollTo({left:((i+1)%n)*sw.clientWidth,behavior:'smooth'})})})}
+function bindWsw(){document.querySelectorAll('.wsw-in').forEach(sw=>{dragScroll(sw);const W=sw.parentNode;sw.addEventListener('load',()=>paintW(W),true);setTimeout(()=>paintW(W),800);sw.addEventListener('scroll',()=>{paintW(W);const i=Math.round(sw.scrollLeft/sw.clientWidth);[...sw.parentNode.querySelectorAll('.dots i')].forEach((d,j)=>d.classList.toggle('on',j===i))},{passive:true});sw.addEventListener('click',()=>{const n=sw.children.length;if(n<2)return;const i=Math.round(sw.scrollLeft/sw.clientWidth);sw.scrollTo({left:((i+1)%n)*sw.clientWidth,behavior:'smooth'})})})}
 const PROJ='<div class="proj mono"><span>PROJECT</span></div>';
 const bannerBottom=()=>PROJ+`${blkOf('renewal',`<div class="grid bn3 nat"><div class="card dc vb vb1">${loopVid('banner/project/2_mo|banner/project/2|banner/project/02')}</div></div>`)}
 ${blkOf('fit',`<div class="grid bn3 nat"><div class="card dc vb vb1">${loopVid('banner/project/3_mo|banner/project/3|banner/project/03')}</div></div>`)}
-${blkOf('bguide',`${wsw(MN('banner/project',5,'menual'))}`)}`;
+${blkOf('bguide',`${wsw(MN('banner/project',5,'menual',2))}`)}`;
 const NOTICE='<span class="ko">모든 이미지의 저작권은 해당 브랜드에 있으며, 포트폴리오 목적으로만 게시되었습니다.</span><br class="en"><span class="en">All images are copyrighted by their respective brands and shown for portfolio purposes only.</span>';
 let tab=0;
 const V={
@@ -497,7 +501,7 @@ const V={
   detail(){const cat=DATA.detail[tab];return `${head('detail')}<div class="ctr">
   <div class="tabs">${DATA.detail.map((c,i)=>`<button class="tab ${i===tab?'on':''}" onclick="setTab(${i})">${c.name}</button>`).join('')}</div>
   <div class="grid narrow">${cat.items.map((o,j)=>`<div><button class="card ar-th" onclick="OPEN('d',${tab},${j})">${im(o.thumb,o.label)}</button></div>`).join('')}</div>
-  <h2>원본 + 보정본</h2><p class="note">swipe →</p>
+  <h2>보정본 + 원본</h2><p class="note">swipe →</p>
   <div class="grid narrow rt1">${cat.retouch.map(r=>`<div class="card ar-th"><div class="sw"><div>${im(r.after,r.label+' 보정본')}</div><div>${im(r.before,r.label+' 원본')}</div></div><span class="dots"><i class="on"></i><i></i></span></div>`).join('')}</div></div>`},
   banner(){const g=(arr,fn)=>`<div class="grid bn3 m3 nat">${arr.map(fn).join('')}</div>`,pl=b=>`<button class="card" onclick="OPENS('${b.src}','${b.label}')">${im(b.src,b.label)}</button>`;
   return `${head('banner')}
@@ -508,7 +512,7 @@ const V={
   <h2>상세 있음</h2>
   ${g(DATA.bannerDetail,(b,i)=>`<button class="card" onclick="OPEN('b',${i})"><span class="badge">DETAIL</span>${im(b.src,b.label)}</button>`)}
   ${bannerBottom()}`},
-  insta(){return head('insta')+dynGrid('instagram',20,'ar-ig')+PROJ+`${blkOf('insta',`${wsw(['instagram/project/1_a','instagram/project/1_b'])}`,'비주얼 가이드라인 적용 후 리뉴얼 피드 (AFTER) → 기존 인스타그램 피드 (BEFORE)')}${blkOf('iguide',`${wsw(MN('instagram/project',6,'menual'),'bd')}`)}`},
+  insta(){return head('insta')+dynGrid('instagram',20,'ar-ig')+PROJ+`${blkOf('insta',`${wsw(['instagram/project/1_a','instagram/project/1_b'])}`,'비주얼 가이드라인 적용 후 리뉴얼 피드 (AFTER) → 기존 인스타그램 피드 (BEFORE)')}${blkOf('iguide',`${wsw(MN('instagram/project',5,'menual',2),'bd')}`)}`},
   pop(){return head('pop')+`<div class="grid narrow nat">${DATA.pop.map(o=>`<button class="card" onclick="OPENS('${o.src}','${o.label}')">${im(o.src,o.label)}</button>`).join('')}</div>`},
   ai(){return head('ai')+`<h2 style="margin-top:0">26FW</h2>`+dynGrid('ai/26FW',24,'ar-th')+`<h2>26SS</h2>`+dynGrid('ai/26SS',24,'ar-th',[],true)+`<h2>Video</h2>`+videoGrid('ai/video',6)},
   resume(){const R=RES,it=(a,n)=>a.map((x,i)=>`<div class="rs-it"><span class="rs-n">${n?n2(i+1):''}</span><div><h4>${x[0]}</h4><p>${x[1]}</p></div></div>`).join('');
