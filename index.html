@@ -219,9 +219,12 @@ body.home{overflow:hidden;background:var(--stage)}
 .desc.dt{margin:0 auto 24px}.desc.dt h3{margin-bottom:0}.desc.db{margin-top:30px}
 @media(max-width:700px){.desc h4{font-size:13.5px;margin-bottom:18px}.desc.dt{margin-bottom:18px}.desc.db{margin-top:22px}.desc h3{font-size:26px;margin-bottom:10px}.desc p{font-size:13.5px;line-height:1.75;margin-bottom:12px}}
 .wsw{margin-left:auto;margin-right:auto}
+.wsww .wsw{width:100%}
+@media(min-width:900px){.wsww .wsw{width:66.667%}}
 .wsw.bd{border:1px solid rgba(255,255,255,.6)}
 .wcap{text-align:center;font-size:11px;color:var(--mute);margin:14px 0 0;letter-spacing:.02em;word-break:keep-all}
 .wsw .dots i{background:#fff;opacity:.5}.wsw .dots i.on{opacity:1}.wsw .dots.bk i{background:#000}
+.card>.dots i{background:#fff;opacity:.5}.card>.dots i.on{opacity:1}.card>.dots.bk i{background:#000}
 .wn{text-align:center;font-size:14px;margin:-16px 0 28px}
 @media(max-width:700px){.wn{margin:-12px 0 28px}}
 .lb video{background:#000}
@@ -362,6 +365,7 @@ const collage=x=>{const a=COLL[x.id]();return im(a.length?a[0]:'',x.label)+(a.le
 /* ===== 렌더링 ===== */
 const $=s=>document.querySelector(s),app=$('#app'),pv=$('#pv');
 const ERR="this.replaceWith(Object.assign(document.createElement('div'),{className:'ph',textContent:this.alt}))";
+const thumbImg=o=>`<img src="${o.thumb}" alt="${o.label}" loading="lazy" data-fb="${o.detail}1_outfit.jpg" onerror="if(this.dataset.fb){this.src=this.dataset.fb;this.removeAttribute('data-fb')}else{${ERR}}">`;
 const im=(src,l)=>src?`<img src="${src}" alt="${l||''}" loading="lazy" onerror="${ERR}">`:`<div class="ph">${l||'IMAGE'}</div>`;
 const go=h=>{if(location.hash.slice(1)!==h)location.hash=h};
 const S=id=>SECTIONS.find(s=>s.id===id);
@@ -392,8 +396,8 @@ function swHTML(o){
 function dragScroll(el){
   let d=null;
   el.addEventListener('pointerdown',e=>{if(e.pointerType!=='mouse'||e.button!==0)return;d={x:e.clientX,l:el.scrollLeft};el._moved=false;el.style.scrollSnapType='none';el.setPointerCapture(e.pointerId)});
-  el.addEventListener('pointermove',e=>{if(!d)return;const dx=e.clientX-d.x;if(Math.abs(dx)>5)el._moved=true;el.scrollLeft=d.l-dx});
-  const end=e=>{if(!d)return;const dx=e.clientX-d.x,w=el.clientWidth||1,i=Math.round(d.l/w);let t=Math.round(el.scrollLeft/w);if(Math.abs(dx)>w*.12)t=dx<0?i+1:i-1;t=Math.max(0,Math.min(el.children.length-1,t));d=null;el.style.scrollSnapType='';el.scrollTo({left:t*w,behavior:'smooth'})};
+  el.addEventListener('pointermove',e=>{if(!d)return;const dx=e.clientX-d.x;if(Math.abs(dx)>9)el._moved=true;el.scrollLeft=d.l-dx});
+  const end=e=>{if(!d)return;const dx=e.clientX-d.x,w=el.clientWidth||1,i=Math.round(d.l/w);let t=Math.round(el.scrollLeft/w);if(Math.abs(dx)>w*.12)t=dx<0?i+1:i-1;t=Math.max(0,Math.min(el.children.length-1,t));const tap=Math.abs(dx)<=9;d=null;el.style.scrollSnapType='';if(!tap)el.scrollTo({left:t*w,behavior:'smooth'})};
   el.addEventListener('pointerup',end);el.addEventListener('pointercancel',end);
   el.addEventListener('click',e=>{if(el._moved){e.stopPropagation();e.preventDefault();el._moved=false}},true);
   el.addEventListener('dragstart',e=>e.preventDefault());
@@ -456,6 +460,10 @@ const flat=(arr,ar)=>`<div class="grid g4">${arr.flat().map(o=>`<button class="c
 /* ===== 확장자 자동 탐색 · 동적 그리드 · 설명 ===== */
 const EXTS=['jpg','gif','png','webp'];
 const cand=b=>[...new Set(b.split('|').flatMap(x=>EXTS.map(e=>I(x)+'.'+e)))];
+function dotBright(img,cw,ch){const Rc=cw/ch,Ri=img.naturalWidth/img.naturalHeight,vw=Ri>Rc?Rc/Ri:1,vh=Ri>Rc?1:Ri/Rc;
+ const c=document.createElement('canvas');c.width=16;c.height=6;const x=c.getContext('2d');x.drawImage(img,img.naturalWidth*((1-vw)/2+vw*.3),img.naturalHeight*((1-vh)/2+vh*.9),img.naturalWidth*vw*.4,img.naturalHeight*vh*.1,0,0,16,6);
+ const px=x.getImageData(0,0,16,6).data;let t=0;for(let k=0;k<px.length;k+=4)t+=.2126*px[k]+.7152*px[k+1]+.0722*px[k+2];return t/(px.length/4)>135}
+function paintSw(sw){const d=sw.parentNode.querySelector('.dots');if(!d)return;const i=Math.round(sw.scrollLeft/(sw.clientWidth||1)),img=sw.children[i]&&sw.children[i].querySelector('img');if(!img||!img.naturalWidth)return;try{d.classList.toggle('bk',dotBright(img,sw.clientWidth,sw.clientHeight))}catch(e){d.classList.remove('bk')}}
 const nimg=(b,alt)=>{const c=cand(b);return `<img src="${c[0]}" data-c="${c.join(',')}" data-k="0" alt="${alt||''}" decoding="async" loading="lazy" onerror="nx(this)">`};
 function nx(img){const c=img.dataset.c.split(','),k=+img.dataset.k+1;if(k<c.length){img.dataset.k=k;img.src=c[k]}else{const r=img.closest('.dc');if(r){r.remove();syncWsw()}}}
 window.ZM=el=>{const i=el.querySelector('img');if(i)lb(i.getAttribute('src'),'')};
@@ -484,7 +492,7 @@ function paintW(w){const sw=w.querySelector('.wsw-in'),d=w.querySelector('.dots'
  try{const c=document.createElement('canvas');c.width=16;c.height=6;const x=c.getContext('2d');x.drawImage(img,img.naturalWidth*.3,img.naturalHeight*.9,img.naturalWidth*.4,img.naturalHeight*.1,0,0,16,6);const px=x.getImageData(0,0,16,6).data;let t=0;for(let k=0;k<px.length;k+=4)t+=.2126*px[k]+.7152*px[k+1]+.0722*px[k+2];
  d.classList.toggle('bk',t/(px.length/4)>135&&img.clientHeight>=w.clientHeight-2)}catch(e){d.classList.remove('bk')}}
 function syncWsw(){document.querySelectorAll('.wsw').forEach(w=>{const n=w.querySelector('.wsw-in').children.length;if(!n){(w.parentNode.classList.contains('wsww')?w.parentNode:w).remove();return}const d=w.querySelector('.dots');if(d.children.length!==n)d.innerHTML=Array.from({length:n},(_,i)=>`<i${i?'':' class="on"'}></i>`).join('')})}
-function bindWsw(){document.querySelectorAll('.wsw-in').forEach(sw=>{dragScroll(sw);const W=sw.parentNode;sw.addEventListener('load',()=>paintW(W),true);setTimeout(()=>paintW(W),800);sw.addEventListener('scroll',()=>{paintW(W);const i=Math.round(sw.scrollLeft/sw.clientWidth);[...sw.parentNode.querySelectorAll('.dots i')].forEach((d,j)=>d.classList.toggle('on',j===i))},{passive:true});sw.addEventListener('click',()=>{const n=sw.children.length;if(n<2)return;const i=Math.round(sw.scrollLeft/sw.clientWidth);sw.scrollTo({left:((i+1)%n)*sw.clientWidth,behavior:'smooth'})})})}
+function bindWsw(){document.querySelectorAll('.wsw-in').forEach(sw=>{dragScroll(sw);const W=sw.parentNode;sw.addEventListener('load',()=>paintW(W),true);setTimeout(()=>paintW(W),800);sw.addEventListener('scroll',()=>{paintW(W);const i=Math.round(sw.scrollLeft/sw.clientWidth);[...sw.parentNode.querySelectorAll('.dots i')].forEach((d,j)=>d.classList.toggle('on',j===i))},{passive:true});sw.addEventListener('click',()=>{const n=sw.children.length;if(n<2)return;const w=sw.clientWidth,i=Math.round(sw.scrollLeft/w);sw._t=((i+1)%n);sw.scrollTo({left:sw._t*w,behavior:'smooth'})})})}
 const PROJ='<div class="proj mono"><span>PROJECT</span></div>';
 const bannerBottom=()=>PROJ+`${blkOf('renewal',`<div class="grid bn3 nat"><div class="card dc vb vb1">${loopVid('banner/project/2_mo|banner/project/2|banner/project/02')}</div></div>`)}
 ${blkOf('fit',`<div class="grid bn3 nat"><div class="card dc vb vb1">${loopVid('banner/project/3_mo|banner/project/3|banner/project/03')}</div></div>`)}
@@ -500,7 +508,7 @@ const V={
   <div class="cr home mono">${NOTICE}</div><div class="cur mono" id="cur"></div></div>`},
   detail(){const cat=DATA.detail[tab];return `${head('detail')}<div class="ctr">
   <div class="tabs">${DATA.detail.map((c,i)=>`<button class="tab ${i===tab?'on':''}" onclick="setTab(${i})">${c.name}</button>`).join('')}</div>
-  <div class="grid narrow">${cat.items.map((o,j)=>`<div><button class="card ar-th" onclick="OPEN('d',${tab},${j})">${im(o.thumb,o.label)}</button></div>`).join('')}</div>
+  <div class="grid narrow">${cat.items.map((o,j)=>`<div><button class="card ar-th" onclick="OPEN('d',${tab},${j})">${thumbImg(o)}</button></div>`).join('')}</div>
   <h2>보정본 + 원본</h2><p class="note">swipe →</p>
   <div class="grid narrow rt1">${cat.retouch.map(r=>`<div class="card ar-th"><div class="sw"><div>${im(r.after,r.label+' 보정본')}</div><div>${im(r.before,r.label+' 원본')}</div></div><span class="dots"><i class="on"></i><i></i></span></div>`).join('')}</div></div>`},
   banner(){const g=(arr,fn)=>`<div class="grid bn3 m3 nat">${arr.map(fn).join('')}</div>`,pl=b=>`<button class="card" onclick="OPENS('${b.src}','${b.label}')">${im(b.src,b.label)}</button>`;
@@ -663,7 +671,8 @@ function render(){
   document.querySelectorAll('.sw').forEach(sw=>{
     dragScroll(sw);
     const dots=sw.parentNode.querySelectorAll('.dots i');
-    sw.addEventListener('scroll',()=>{const i=Math.round(sw.scrollLeft/sw.clientWidth);dots.forEach((d,j)=>d.classList.toggle('on',j===i))},{passive:true});
+    sw.addEventListener('load',()=>paintSw(sw),true);setTimeout(()=>paintSw(sw),800);
+    sw.addEventListener('scroll',()=>{const i=Math.round(sw.scrollLeft/sw.clientWidth);dots.forEach((d,j)=>d.classList.toggle('on',j===i));paintSw(sw)},{passive:true});
     sw.addEventListener('click',()=>{const i=Math.round(sw.scrollLeft/sw.clientWidth);sw.scrollTo({left:(i?0:1)*sw.clientWidth,behavior:'smooth'})})
   });
 }
