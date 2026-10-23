@@ -215,8 +215,9 @@ body.home{overflow:hidden;background:var(--stage)}
 .desc h3{font-size:21px;font-weight:800;letter-spacing:-.02em;line-height:1.25;margin-bottom:12px}
 .desc p{font-size:16px;line-height:1.75;color:var(--mute);margin-bottom:14px;word-break:keep-all}
 
-.desc h4{font-size:17px;font-weight:600;color:#d6d1d1;line-height:1.5;margin:-2px 0 14px;word-break:keep-all}
-@media(max-width:700px){.desc h4{font-size:14px;margin-bottom:10px}.desc h3{font-size:17px;margin-bottom:10px}.desc p{font-size:13.5px;line-height:1.75;margin-bottom:12px}}
+.desc h4{font-size:16px;font-weight:700;color:#e6e1e1;line-height:1.75;margin:0 0 22px;word-break:keep-all}
+.desc.dt{margin:0 auto 24px}.desc.dt h3{margin-bottom:0}.desc.db{margin-top:30px}
+@media(max-width:700px){.desc h4{font-size:13.5px;margin-bottom:18px}.desc.dt{margin-bottom:18px}.desc.db{margin-top:22px}.desc h3{font-size:17px;margin-bottom:10px}.desc p{font-size:13.5px;line-height:1.75;margin-bottom:12px}}
 .wsw{margin-left:auto;margin-right:auto}
 .wn{text-align:center;font-size:14px;margin:0 0 14px}
 .lb video{background:#000}
@@ -463,21 +464,23 @@ window.OPENV=el=>{const v=el.querySelector('video');if(!v)return;const u=(v.curr
 const videoGrid=(dir,max)=>`<div class="grid vgrid">${Array.from({length:max},(_,i)=>i+1).map(n=>`<button class="card dc vid" style="aspect-ratio:${VIDEO_RATIO}" onclick="OPENV(this)">${vtag(dir+'/'+n2(n)+'|'+dir+'/'+n,'preload="metadata" muted playsinline','#t=0.1')}<span class="play"><svg viewBox="0 0 24 24"><path d="M8.5 5.5v13l11-6.5z"/></svg></span></button>`).join('')}</div>`;
 const loopVid=b=>vtag(b,'autoplay muted loop playsinline preload="auto"');
 const DESC={
- insta:['인스타그램 피드 리뉴얼',['기존 상세 페이지의 긴 스크롤을 개선하기 위해 디테일 컷을 작은 사이즈로 재구성하여 여러 이미지를 효율적으로 배치했습니다. 또한 제품의 실제 착용감과 스타일을 직관적으로 보여줄 수 있도록 AI 착장 이미지를 제작해 페이지 상단에 배치하여 상품의 비주얼 전달력을 강화했습니다.']],
- renewal:['브랜드 홈페이지 리뉴얼',['기존 모바일 메인 배너의 세로 길이가 길어 하단 제품 목록이 바로 노출되지 않는 UI/UX를 개선했습니다. 배너 높이를 축소하여 메인 비주얼과 제품 목록을 한 화면에서 직관적으로 확인할 수 있도록 구성했습니다.','정적인 느낌이 강했던 기존 배너에는 타이틀 모션을 적용해 시각적인 주목도를 높이고, 배너별 디자인 요소를 정돈하여 전체적인 브랜드 무드에 통일감을 더했습니다. 또한 상단 띠 배너에도 롤링 모션을 적용해 주요 메시지가 자연스럽게 시선에 들어오도록 개선했습니다.']],
+ insta:['인스타그램 피드 리뉴얼',['긴 상세 스크롤을 줄이는 디테일 컷 재구성과 AI 착장 이미지를 적용했습니다.','기존 상세 페이지의 긴 스크롤을 개선하기 위해 디테일 컷을 작은 사이즈로 재구성하여 여러 이미지를 효율적으로 배치했습니다. 또한 제품의 실제 착용감과 스타일을 직관적으로 보여줄 수 있도록 AI 착장 이미지를 제작해 페이지 상단에 배치하여 상품의 비주얼 전달력을 강화했습니다.'],1],
+ renewal:['브랜드 홈페이지 리뉴얼',['모바일 메인 배너 높이를 줄여 메인 비주얼과 제품 목록을 한 화면에 담았습니다.','기존 모바일 메인 배너의 세로 길이가 길어 하단 제품 목록이 바로 노출되지 않는 UI/UX를 개선했습니다. 배너 높이를 축소하여 메인 비주얼과 제품 목록을 한 화면에서 직관적으로 확인할 수 있도록 구성했습니다.','정적인 느낌이 강했던 기존 배너에는 타이틀 모션을 적용해 시각적인 주목도를 높이고, 배너별 디자인 요소를 정돈하여 전체적인 브랜드 무드에 통일감을 더했습니다. 또한 상단 띠 배너에도 롤링 모션을 적용해 주요 메시지가 자연스럽게 시선에 들어오도록 개선했습니다.'],1],
  bguide:['DIGITAL BANNER GUIDELINE',['채널과 콘텐츠 목적에 따른 디지털 배너 운영 기준 정립','시즌·세일즈·에디토리얼 등 콘텐츠 목적에 따라 배너 유형을 세분화하고, 일관된 브랜드 이미지를 유지할 수 있도록 디자인 기준을 정리했습니다.','PC·MO 쿠폰 배너부터 카카오 메시지, 전환 광고까지 채널별 이미지 구성과 타이틀·혜택 정보의 배치 기준을 체계화했습니다.'],1],
  iguide:['INSTAGRAM VISUAL GUIDELINE',['브랜드 아이덴티티를 일관되게 전달하기 위한 인스타그램 운영 가이드 구축','브랜드의 비주얼 톤앤매너를 일관되게 유지할 수 있도록 인스타그램 운영 및 비주얼 가이드라인을 정리했습니다.','톤 보정 기준부터 콘텐츠 카테고리, 그리드 배열, 스토리·릴스 운영 기준까지 체계화하여 콘텐츠 제작 시 명확한 디자인 기준을 제시했습니다.'],1],
- fit:['FIT 카테고리 추가',['소비자가 상품 선택 시 핏에 대한 고민을 줄이고 보다 쉽게 구매를 결정할 수 있도록 FIT 가이드 카테고리를 새롭게 기획했습니다. 다양한 핏을 직관적으로 비교하고 자신에게 맞는 스타일을 선택할 수 있도록 구성하여, 구매 편의성을 높이고 자연스럽게 판매로 이어질 수 있도록 했습니다.','제한된 예산과 짧은 제작 기간을 고려해 AI를 활용한 착장 이미지를 직접 생성·적용했으며, 별도의 촬영 없이도 각 핏의 특징을 효과적으로 전달할 수 있도록 콘텐츠를 구성했습니다.']]
+ fit:['FIT 카테고리 추가',['핏 고민을 줄이고 구매 결정을 돕는 FIT 가이드 카테고리를 기획했습니다.','소비자가 상품 선택 시 핏에 대한 고민을 줄이고 보다 쉽게 구매를 결정할 수 있도록 FIT 가이드 카테고리를 새롭게 기획했습니다. 다양한 핏을 직관적으로 비교하고 자신에게 맞는 스타일을 선택할 수 있도록 구성하여, 구매 편의성을 높이고 자연스럽게 판매로 이어질 수 있도록 했습니다.','제한된 예산과 짧은 제작 기간을 고려해 AI를 활용한 착장 이미지를 직접 생성·적용했으며, 별도의 촬영 없이도 각 핏의 특징을 효과적으로 전달할 수 있도록 콘텐츠를 구성했습니다.'],1]
 };
-const descHTML=k=>{const d=DESC[k];return `<div class="desc"><h3>${d[0]}</h3>${d[1].map((t,i)=>d[2]&&!i?`<h4>${t}</h4>`:`<p>${t}</p>`).join('')}</div>`};
+const descT=k=>`<div class="desc dt"><h3>${DESC[k][0]}</h3></div>`;
+const descB=k=>{const d=DESC[k];return `<div class="desc db">${d[1].map((t,i)=>d[2]&&!i?`<h4>${t}</h4>`:`<p>${t}</p>`).join('')}</div>`};
+const blkOf=(k,m)=>`<section class="blk">${descT(k)}${m}${descB(k)}</section>`;
 const MN=(dir,n,nm)=>Array.from({length:n},(_,i)=>`${dir}/${nm}${i+1}|${dir}/${nm}${n2(i+1)}|${dir}/${nm}_${i+1}`);
 const wsw=bs=>`<div class="wsww"><p class="note wn">swipe →</p><div class="wsw"><div class="wsw-in">${bs.map(b=>`<div class="dc">${nimg(b)}</div>`).join('')}</div><span class="dots">${bs.map((_,i)=>`<i${i?'':' class="on"'}></i>`).join('')}</span></div></div>`;
 function syncWsw(){document.querySelectorAll('.wsw').forEach(w=>{const n=w.querySelector('.wsw-in').children.length;if(!n){(w.parentNode.classList.contains('wsww')?w.parentNode:w).remove();return}const d=w.querySelector('.dots');if(d.children.length!==n)d.innerHTML=Array.from({length:n},(_,i)=>`<i${i?'':' class="on"'}></i>`).join('')})}
 function bindWsw(){document.querySelectorAll('.wsw-in').forEach(sw=>{dragScroll(sw);sw.addEventListener('scroll',()=>{const i=Math.round(sw.scrollLeft/sw.clientWidth);[...sw.parentNode.querySelectorAll('.dots i')].forEach((d,j)=>d.classList.toggle('on',j===i))},{passive:true});sw.addEventListener('click',()=>{const n=sw.children.length;if(n<2)return;const i=Math.round(sw.scrollLeft/sw.clientWidth);sw.scrollTo({left:((i+1)%n)*sw.clientWidth,behavior:'smooth'})})})}
 const PROJ='<div class="proj mono"><span>PROJECT</span></div>';
-const bannerBottom=()=>PROJ+`<section class="blk"><div class="grid bn3 nat"><div class="card dc vb vb1">${loopVid('banner/project/2_mo|banner/project/2|banner/project/02')}</div></div>${descHTML('renewal')}</section>
-<section class="blk"><div class="grid bn3 nat"><div class="card dc vb vb1">${loopVid('banner/project/3_mo|banner/project/3|banner/project/03')}</div></div>${descHTML('fit')}</section>
-<section class="blk">${wsw(MN('banner/project',5,'menual'))}${descHTML('bguide')}</section>`;
+const bannerBottom=()=>PROJ+`${blkOf('renewal',`<div class="grid bn3 nat"><div class="card dc vb vb1">${loopVid('banner/project/2_mo|banner/project/2|banner/project/02')}</div></div>`)}
+${blkOf('fit',`<div class="grid bn3 nat"><div class="card dc vb vb1">${loopVid('banner/project/3_mo|banner/project/3|banner/project/03')}</div></div>`)}
+${blkOf('bguide',`${wsw(MN('banner/project',5,'menual'))}`)}`;
 const NOTICE='<span class="ko">모든 이미지의 저작권은 해당 브랜드에 있으며, 포트폴리오 목적으로만 게시되었습니다.</span><br class="en"><span class="en">All images are copyrighted by their respective brands and shown for portfolio purposes only.</span>';
 let tab=0;
 const V={
@@ -501,7 +504,7 @@ const V={
   <h2>상세 있음</h2>
   ${g(DATA.bannerDetail,(b,i)=>`<button class="card" onclick="OPEN('b',${i})"><span class="badge">DETAIL</span>${im(b.src,b.label)}</button>`)}
   ${bannerBottom()}`},
-  insta(){return head('insta')+dynGrid('instagram',20,'ar-ig')+PROJ+`<section class="blk">${wsw(['instagram/project/1_a','instagram/project/1_b'])}${descHTML('insta')}</section><section class="blk">${wsw(MN('instagram/project',6,'menual'))}${descHTML('iguide')}</section>`},
+  insta(){return head('insta')+dynGrid('instagram',20,'ar-ig')+PROJ+`${blkOf('insta',`${wsw(['instagram/project/1_a','instagram/project/1_b'])}`)}${blkOf('iguide',`${wsw(MN('instagram/project',6,'menual'))}`)}`},
   pop(){return head('pop')+`<div class="grid narrow nat">${DATA.pop.map(o=>`<button class="card" onclick="OPENS('${o.src}','${o.label}')">${im(o.src,o.label)}</button>`).join('')}</div>`},
   ai(){return head('ai')+`<h2 style="margin-top:0">26FW</h2>`+dynGrid('ai/26FW',24,'ar-th')+`<h2>26SS</h2>`+dynGrid('ai/26SS',24,'ar-th',[],true)+`<h2>Video</h2>`+videoGrid('ai/video',6)},
   resume(){const R=RES,it=(a,n)=>a.map((x,i)=>`<div class="rs-it"><span class="rs-n">${n?n2(i+1):''}</span><div><h4>${x[0]}</h4><p>${x[1]}</p></div></div>`).join('');
